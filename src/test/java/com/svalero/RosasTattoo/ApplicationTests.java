@@ -1,4 +1,4 @@
-package com.svalero._RosasTattoo;
+package com.svalero.RosasTattoo;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

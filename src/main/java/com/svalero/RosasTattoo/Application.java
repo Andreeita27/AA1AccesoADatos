@@ -1,4 +1,4 @@
-package com.svalero._RosasTattoo;
+package com.svalero.RosasTattoo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
