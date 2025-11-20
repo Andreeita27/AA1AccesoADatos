@@ -25,7 +25,7 @@ public class ClientService {
 
     public void delete(long id) throws ClientNotFoundException {
         Client client = clientRepository.findById(id)
-                .orElseThrow(() -> new ClientNotFoundException(id));
+                .orElseThrow(ClientNotFoundException::new);
 
         clientRepository.delete(client);
     }
@@ -48,7 +48,7 @@ public class ClientService {
 
     public ClientOutDto findById(long id) throws ClientNotFoundException {
         Client client = clientRepository.findById(id)
-                .orElseThrow(() -> new ClientNotFoundException(id));
+                .orElseThrow(ClientNotFoundException::new);
 
         ClientOutDto clientOutDto = modelMapper.map(client, ClientOutDto.class);
         return clientOutDto;
@@ -56,7 +56,7 @@ public class ClientService {
     
     public Client modify(long id, Client client) throws ClientNotFoundException {
         Client existingClient = clientRepository.findById(id)
-                .orElseThrow(() -> new ClientNotFoundException(id));
+                .orElseThrow(ClientNotFoundException::new);
 
         modelMapper.map(client, existingClient);
         existingClient.setId(id);
