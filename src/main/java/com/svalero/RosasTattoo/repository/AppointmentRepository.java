@@ -2,7 +2,9 @@ package com.svalero.RosasTattoo.repository;
 
 import com.svalero.RosasTattoo.domain.Appointment;
 import com.svalero.RosasTattoo.domain.enums.AppointmentState;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -12,5 +14,13 @@ public interface AppointmentRepository extends CrudRepository<Appointment, Long>
 
     List<Appointment> findAll();
 
-    List<Appointment> findByStateAndClient_IdAndProfessional_Id(AppointmentState state, long clientId, long professionalId);
+    @Query("SELECT a FROM appointments a WHERE " +
+            "(:state IS NULL OR a.state = :state) AND " +
+            "(:clientId IS NULL OR a.client.id = :clientId) AND " +
+            "(:profId IS NULL OR a.professional.id = :profId)")
+    List<Appointment> findByFilters(
+            @Param("state") AppointmentState state,
+            @Param("clientId") Long clientId,
+            @Param("profId") Long profId
+    );
 }

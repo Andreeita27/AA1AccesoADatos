@@ -32,19 +32,7 @@ public class AppointmentService {
     private ModelMapper modelMapper;
 
     public List<AppointmentOutDto> findAll(AppointmentState state, Long clientId, Long professionalId) {
-        List<Appointment> appointments;
-
-        if (state != null || clientId != null || professionalId != null) {
-
-            long queryClientId = (clientId != null) ? clientId : 0;
-            long queryProfessionalId = (professionalId != null) ? professionalId : 0;
-            AppointmentState queryState = (state != null) ? state : AppointmentState.PENDING;
-
-            appointments = appointmentRepository.findByStateAndClient_IdAndProfessional_Id(queryState, queryClientId, queryProfessionalId);
-        } else {
-            appointments = appointmentRepository.findAll();
-        }
-
+        List<Appointment> appointments = appointmentRepository.findByFilters(state, clientId, professionalId);
         return modelMapper.map(appointments, new TypeToken<List<AppointmentOutDto>>() {}.getType());
     }
 
