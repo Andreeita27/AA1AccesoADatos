@@ -1129,7 +1129,7 @@ components:
           type: number
           format: float
           description: Precio de la cita en euros
-        state:
+        appointmentState:
           type: string
           description: Estado actual de la cita
           enum:
@@ -1153,7 +1153,7 @@ components:
         referenceImageUrl: "https://www.ejemplo.com/manuel.jpg"
         durationMinutes: 60
         price: 80.0
-        state: "CONFIRMED"
+        appointmentState: "CONFIRMED"
         depositPaid: true
 
     Appointment:
@@ -1178,7 +1178,7 @@ components:
         referenceImageUrl: "https://www.ejemplo.com/manuel.jpg"
         durationMinutes: 60
         price: 80.0
-        state: "CONFIRMED"
+        appointmentState: "CONFIRMED"
         depositPaid: true
 
     TattooInDto:
