@@ -20,18 +20,7 @@ public class ProfessionalService {
     private ModelMapper modelMapper;
 
     public List<ProfessionalOutDto> findAll(String name, Boolean booksOpened, Integer yearsExperience) {
-        List<Professional> professionals;
-
-        if ((name != null && !name.isEmpty()) || booksOpened != null || yearsExperience != null) {
-            String queryName = name != null ? name : "";
-            boolean queryBooks = booksOpened != null ? booksOpened : false;
-            int queryYears = yearsExperience != null ? yearsExperience : 0;
-
-            professionals = professionalRepository.findByProfessionalNameContainingAndBooksOpenedAndYearsExperience(queryName, queryBooks, queryYears);
-        } else {
-            professionals = professionalRepository.findAll();
-        }
-
+        List<Professional> professionals = professionalRepository.findByFilters(name, booksOpened, yearsExperience);
         return modelMapper.map(professionals, new TypeToken<List<ProfessionalOutDto>>() {}.getType());
     }
 

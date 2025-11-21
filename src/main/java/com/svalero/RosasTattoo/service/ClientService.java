@@ -31,18 +31,7 @@ public class ClientService {
     }
 
     public List<ClientOutDto> findAll(String name, String surname, Boolean showPhoto) {
-        List<Client> clients;
-
-        if ((name != null && !name.isEmpty()) || (surname != null && !surname.isEmpty()) || showPhoto != null) {
-            String queryName = name != null ? name : "";
-            String querySurname = surname != null ? surname : "";
-            boolean queryShowPhoto = showPhoto != null ? showPhoto : false;
-
-            clients = clientRepository.findByClientNameContainingAndClientSurnameContainingAndShowPhoto(queryName, querySurname, queryShowPhoto);
-        } else {
-            clients = clientRepository.findAll();
-        }
-
+        List<Client> clients = clientRepository.findByFilters(name, surname, showPhoto);
         return modelMapper.map(clients, new TypeToken<List<ClientOutDto>>() {}.getType());
     }
 
