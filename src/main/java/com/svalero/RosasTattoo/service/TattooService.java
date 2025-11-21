@@ -31,17 +31,8 @@ public class TattooService {
     private ModelMapper modelMapper;
 
     public List<TattooOutDto> findAll(String style, Boolean coverUp, Boolean color) {
-        List<Tattoo> tattoos;
+        List<Tattoo> tattoos = tattooRepository.findByFilters(style, coverUp, color);
 
-        if (style != null || coverUp != null || color != null) {
-            String queryStyle = style != null ? style : "";
-            boolean queryCoverUp = coverUp != null ? coverUp : false;
-            boolean queryColor = color != null ? color : false;
-
-            tattoos = tattooRepository.findByStyleContainingAndCoverUpAndColor(queryStyle, queryCoverUp, queryColor);
-        } else {
-            tattoos = tattooRepository.findAll();
-        }
         return modelMapper.map(tattoos, new TypeToken<List<TattooOutDto>>() {}.getType());
     }
 
