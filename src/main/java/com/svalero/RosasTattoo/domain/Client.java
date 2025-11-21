@@ -42,5 +42,5 @@ public class Client {
     private boolean showPhoto;
 
     @Column
-    private long visits;
+    private int visits;
 }
