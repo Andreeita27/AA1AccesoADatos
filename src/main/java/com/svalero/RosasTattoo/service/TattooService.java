@@ -7,6 +7,7 @@ import com.svalero.RosasTattoo.dto.TattooInDto;
 import com.svalero.RosasTattoo.dto.TattooOutDto;
 import com.svalero.RosasTattoo.exception.ClientNotFoundException;
 import com.svalero.RosasTattoo.exception.ProfessionalNotFoundException;
+import com.svalero.RosasTattoo.exception.TattooNotFoundException;
 import com.svalero.RosasTattoo.repository.ClientRepository;
 import com.svalero.RosasTattoo.repository.ProfessionalRepository;
 import com.svalero.RosasTattoo.repository.TattooRepository;

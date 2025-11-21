@@ -6,6 +6,7 @@ import com.svalero.RosasTattoo.dto.TattooOutDto;
 import com.svalero.RosasTattoo.exception.ClientNotFoundException;
 import com.svalero.RosasTattoo.exception.ErrorResponse;
 import com.svalero.RosasTattoo.exception.ProfessionalNotFoundException;
+import com.svalero.RosasTattoo.exception.TattooNotFoundException;
 import com.svalero.RosasTattoo.service.TattooService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
