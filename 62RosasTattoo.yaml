@@ -1017,6 +1017,10 @@ components:
         booksOpened:
           type: boolean
           description: Indica si la agenda está abierta para coger citas
+        yearsExperience:
+          type: number
+          format: int64
+          description: Años de experiencia del profesional
       required:
         - professionalName
         - booksOpened
@@ -1026,16 +1030,12 @@ components:
         description: "Especialista en tatuaje neotradicional."
         profilePhoto: "https://62rosastattoo.com/img/profesionales/davideltiti.jpg"
         booksOpened: true
+        yearsExperience: 15
 
     ProfessionalOutDto:
       allOf:
         - $ref: '#/components/schemas/ProfessionalInDto'
       type: object
-      properties:
-        yearsExperience:
-          type: number
-          format: int64
-          description: Años de experiencia del profesional
       example:
         professionalName: "David el Titi"
         birthDate: "1986-12-05"
