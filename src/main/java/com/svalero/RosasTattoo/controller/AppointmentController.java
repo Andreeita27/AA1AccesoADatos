@@ -1,6 +1,7 @@
 package com.svalero.RosasTattoo.controller;
 
 import com.svalero.RosasTattoo.domain.Appointment;
+import com.svalero.RosasTattoo.domain.enums.AppointmentState;
 import com.svalero.RosasTattoo.dto.AppointmentInDto;
 import com.svalero.RosasTattoo.dto.AppointmentOutDto;
 import com.svalero.RosasTattoo.exception.ClientNotFoundException;
@@ -22,8 +23,13 @@ public class AppointmentController {
     private AppointmentService appointmentService;
 
     @GetMapping("/appointments")
-    public ResponseEntity<List<AppointmentOutDto>> getAll() {
-        return ResponseEntity.ok(appointmentService.findAll());
+    public ResponseEntity<List<AppointmentOutDto>> getAll(
+            @RequestParam(required = false) AppointmentState state,
+            @RequestParam(required = false) Long clientId,
+            @RequestParam(required = false) Long professionalId
+    ) {
+
+        return ResponseEntity.ok(appointmentService.findAll(state, clientId, professionalId));
     }
 
     @PostMapping("/appointments")

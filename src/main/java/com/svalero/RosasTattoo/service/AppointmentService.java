@@ -3,6 +3,7 @@ package com.svalero.RosasTattoo.service;
 import com.svalero.RosasTattoo.domain.Appointment;
 import com.svalero.RosasTattoo.domain.Client;
 import com.svalero.RosasTattoo.domain.Professional;
+import com.svalero.RosasTattoo.domain.enums.AppointmentState;
 import com.svalero.RosasTattoo.dto.AppointmentInDto;
 import com.svalero.RosasTattoo.dto.AppointmentOutDto;
 import com.svalero.RosasTattoo.exception.ClientNotFoundException;
@@ -29,8 +30,20 @@ public class AppointmentService {
     @Autowired
     private ModelMapper modelMapper;
 
-    public List<AppointmentOutDto> findAll() {
-        List<Appointment> appointments = appointmentRepository.findAll();
+    public List<AppointmentOutDto> findAll(AppointmentState state, Long clientId, Long professionalId) {
+        List<Appointment> appointments;
+
+        if (state != null || clientId != null || professionalId != null) {
+
+            long queryClientId = (clientId != null) ? clientId : 0;
+            long queryProfessionalId = (professionalId != null) ? professionalId : 0;
+            AppointmentState queryState = (state != null) ? state : AppointmentState.PENDING;
+
+            appointments = appointmentRepository.findByStateAndClient_IdAndProfessional_Id(queryState, queryClientId, queryProfessionalId);
+        } else {
+            appointments = appointmentRepository.findAll();
+        }
+
         return modelMapper.map(appointments, new TypeToken<List<AppointmentOutDto>>() {}.getType());
     }
 
