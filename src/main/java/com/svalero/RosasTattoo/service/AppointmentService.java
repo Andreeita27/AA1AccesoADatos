@@ -6,6 +6,7 @@ import com.svalero.RosasTattoo.domain.Professional;
 import com.svalero.RosasTattoo.domain.enums.AppointmentState;
 import com.svalero.RosasTattoo.dto.AppointmentInDto;
 import com.svalero.RosasTattoo.dto.AppointmentOutDto;
+import com.svalero.RosasTattoo.exception.AppointmentNotFoundException;
 import com.svalero.RosasTattoo.exception.ClientNotFoundException;
 import com.svalero.RosasTattoo.exception.ProfessionalNotFoundException;
 import com.svalero.RosasTattoo.repository.AppointmentRepository;
@@ -91,5 +92,12 @@ public class AppointmentService {
                 .orElseThrow(AppointmentNotFoundException::new);
 
         appointmentRepository.delete(appointment);
+    }
+
+    public AppointmentOutDto findById(long id) throws AppointmentNotFoundException {
+        Appointment appointment = appointmentRepository.findById(id)
+                .orElseThrow(AppointmentNotFoundException::new);
+
+        return modelMapper.map(appointment, AppointmentOutDto.class);
     }
 }

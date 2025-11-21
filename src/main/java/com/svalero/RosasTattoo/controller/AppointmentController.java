@@ -4,6 +4,7 @@ import com.svalero.RosasTattoo.domain.Appointment;
 import com.svalero.RosasTattoo.domain.enums.AppointmentState;
 import com.svalero.RosasTattoo.dto.AppointmentInDto;
 import com.svalero.RosasTattoo.dto.AppointmentOutDto;
+import com.svalero.RosasTattoo.exception.AppointmentNotFoundException;
 import com.svalero.RosasTattoo.exception.ClientNotFoundException;
 import com.svalero.RosasTattoo.exception.ErrorResponse;
 import com.svalero.RosasTattoo.exception.ProfessionalNotFoundException;
