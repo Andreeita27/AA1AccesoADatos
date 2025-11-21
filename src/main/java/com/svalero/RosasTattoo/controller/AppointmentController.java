@@ -13,9 +13,13 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class AppointmentController {
@@ -65,5 +69,28 @@ public class AppointmentController {
     public ResponseEntity<ErrorResponse> handleException(AppointmentNotFoundException anfe) {
         ErrorResponse errorResponse = ErrorResponse.notFound(anfe.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(ClientNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleClientException(ClientNotFoundException cnfe) {
+        ErrorResponse errorResponse = ErrorResponse.notFound("Cliente no encontrado");
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(ProfessionalNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleProfessionalException(ProfessionalNotFoundException pnfe) {
+        ErrorResponse errorResponse = ErrorResponse.notFound("Profesional no encontrado");
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> handleValidationException(MethodArgumentNotValidException manve) {
+        Map<String, String> errors = new HashMap<>();
+        manve.getBindingResult().getAllErrors().forEach(error -> {
+            String fieldName = ((FieldError) error).getField();
+            String message = error.getDefaultMessage();
+            errors.put(fieldName, message);
+        });
+        return new ResponseEntity<>(ErrorResponse.validationError(errors), HttpStatus.BAD_REQUEST);
     }
 }

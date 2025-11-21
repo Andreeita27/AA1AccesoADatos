@@ -63,6 +63,7 @@ public class AppointmentService {
         appointment.setClient(client);
         appointment.setProfessional(professional);
         appointment.setDepositPaid(false);
+        appointment.setId(0);
 
         return appointmentRepository.save(appointment);
     }
