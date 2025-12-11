@@ -15,11 +15,11 @@ public interface ReviewRepository extends CrudRepository<Review, Long> {
 
     @Query("SELECT r FROM reviews r WHERE " +
             "(:rating IS NULL OR r.rating = :rating) AND " +
-            "(:profId IS NULL OR r.appointment.professional.id = :profId) AND " +
+            "(:professionalId IS NULL OR r.appointment.professional.id = :professionalId) AND " +
             "(:recommend IS NULL OR r.wouldRecommend = :recommend)")
     List<Review> findByFilters(
             @Param("rating") Integer rating,
-            @Param("profId") Long profId,
+            @Param("professionalId") Long profId,
             @Param("recommend") Boolean recommend
     );
 }
