@@ -67,12 +67,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BadRequest'
-        '409':
-          description: Conflicto. Ya existe un cliente con ese email.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Conflict'
         '500':
           description: Internal server error
           content:
@@ -244,12 +238,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BadRequest'
-        '409':
-          description: Conflicto. Ya existe un profesional con esos datos.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Conflict'
         '500':
           description: Internal server error
           content:
@@ -428,12 +416,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BadRequest'
-        '409':
-          description: Conflicto. Ya existe una cita para ese profesional en ese horario.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Conflict'
         '500':
           description: Internal server error
           content:
