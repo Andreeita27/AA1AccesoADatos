@@ -67,12 +67,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BadRequest'
-        '409':
-          description: Conflicto. Ya existe un cliente con ese email.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Conflict'
         '500':
           description: Internal server error
           content:
@@ -142,12 +136,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BadRequest'
-        '404':
-          description: Cliente no encontrado.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
         '500':
           description: Internal server error.
           content:
@@ -244,12 +232,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BadRequest'
-        '409':
-          description: Conflicto. Ya existe un profesional con esos datos.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Conflict'
         '500':
           description: Internal server error
           content:
@@ -319,12 +301,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BadRequest'
-        '404':
-          description: Profesional no encontrado.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
         '500':
           description: Internal server error.
           content:
@@ -428,12 +404,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BadRequest'
-        '409':
-          description: Conflicto. Ya existe una cita para ese profesional en ese horario.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Conflict'
         '500':
           description: Internal server error
           content:
@@ -503,12 +473,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BadRequest'
-        '404':
-          description: Cita no encontrada.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
         '500':
           description: Internal server error.
           content:
@@ -673,12 +637,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BadRequest'
-        '404':
-          description: Tatuaje no encontrado.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
         '500':
           description: Internal server error.
           content:
@@ -845,12 +803,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BadRequest'
-        '404':
-          description: Reseña no encontrada.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
         '500':
           description: Internal server error.
           content:
