@@ -1,6 +1,9 @@
 package com.svalero.RosasTattoo.dto;
 
 import com.svalero.RosasTattoo.domain.enums.TattooSize;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,12 +14,24 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AppointmentInDto {
+
     private long clientId;
+
     private String professionalName;
+
+    @NotNull(message = "This field is mandatory")
     private LocalDateTime startDateTime;
+
+    @NotNull(message = "This field is mandatory")
     private String bodyPlacement;
+
+    @NotNull(message = "This field is mandatory")
     private String ideaDescription;
+
     private boolean firstTime;
+
+    @Enumerated(EnumType.STRING)
     private TattooSize tattooSize;
+
     private String referenceImageUrl;
 }

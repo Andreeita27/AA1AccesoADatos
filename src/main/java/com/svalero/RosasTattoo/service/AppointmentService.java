@@ -4,8 +4,8 @@ import com.svalero.RosasTattoo.domain.Appointment;
 import com.svalero.RosasTattoo.domain.Client;
 import com.svalero.RosasTattoo.domain.Professional;
 import com.svalero.RosasTattoo.domain.enums.AppointmentState;
+import com.svalero.RosasTattoo.dto.AppointmentDto;
 import com.svalero.RosasTattoo.dto.AppointmentInDto;
-import com.svalero.RosasTattoo.dto.AppointmentOutDto;
 import com.svalero.RosasTattoo.exception.AppointmentNotFoundException;
 import com.svalero.RosasTattoo.exception.ClientNotFoundException;
 import com.svalero.RosasTattoo.exception.ProfessionalNotFoundException;
@@ -31,49 +31,62 @@ public class AppointmentService {
     @Autowired
     private ModelMapper modelMapper;
 
-    public List<AppointmentOutDto> findAll(AppointmentState state, Long clientId, Long professionalId) {
+    public List<AppointmentDto> findAll(AppointmentState state, Long clientId, Long professionalId) {
         List<Appointment> appointments = appointmentRepository.findByFilters(state, clientId, professionalId);
-        return modelMapper.map(appointments, new TypeToken<List<AppointmentOutDto>>() {}.getType());
+        return modelMapper.map(appointments, new TypeToken<List<AppointmentDto>>() {}.getType());
     }
 
-    public Appointment add(AppointmentInDto appointmentInDto) throws ClientNotFoundException, ProfessionalNotFoundException {
-        Client client = clientRepository.findById(appointmentInDto.getClientId())
-                .orElseThrow(ClientNotFoundException::new);
-
-        List<Professional> professionals = professionalRepository.findByProfessionalName(appointmentInDto.getProfessionalName());
-        if (professionals.isEmpty()) {
-            throw new ProfessionalNotFoundException();
-        }
-        Professional professional = professionals.get(0);
-
-        Appointment appointment = new Appointment();
-        modelMapper.map(appointmentInDto, appointment);
-        appointment.setClient(client);
-        appointment.setProfessional(professional);
-        appointment.setDepositPaid(false);
-        appointment.setId(0);
-
-        return appointmentRepository.save(appointment);
-    }
-
-    public Appointment modify(long id, AppointmentInDto appointmentInDto) throws AppointmentNotFoundException, ClientNotFoundException, ProfessionalNotFoundException {
+    public AppointmentDto findById(long id) throws AppointmentNotFoundException {
         Appointment appointment = appointmentRepository.findById(id)
                 .orElseThrow(AppointmentNotFoundException::new);
 
-        Client client = clientRepository.findById(appointmentInDto.getClientId())
+        return modelMapper.map(appointment, AppointmentDto.class);
+    }
+
+    public AppointmentDto add(AppointmentInDto dto) throws ClientNotFoundException, ProfessionalNotFoundException {
+        Client client = clientRepository.findById(dto.getClientId())
                 .orElseThrow(ClientNotFoundException::new);
 
-        List<Professional> professionals = professionalRepository.findByProfessionalName(appointmentInDto.getProfessionalName());
-        if (professionals.isEmpty()) {
-            throw new ProfessionalNotFoundException();
-        }
-        Professional professional = professionals.get(0);
-        modelMapper.map(appointmentInDto, appointment);
-        appointment.setId(id);
+        List<Professional> professionals =
+                professionalRepository.findByProfessionalName(dto.getProfessionalName());
+
+        Professional professional = professionals.stream()
+                .findFirst()
+                .orElseThrow(ProfessionalNotFoundException::new);
+
+
+        Appointment appointment = modelMapper.map(dto, Appointment.class);
         appointment.setClient(client);
         appointment.setProfessional(professional);
 
-        return appointmentRepository.save(appointment);
+        Appointment saved = appointmentRepository.save(appointment);
+        return modelMapper.map(saved, AppointmentDto.class);
+    }
+
+    public AppointmentDto modify(long id, AppointmentInDto dto)
+            throws AppointmentNotFoundException, ClientNotFoundException, ProfessionalNotFoundException {
+
+        Appointment existing = appointmentRepository.findById(id)
+                .orElseThrow(AppointmentNotFoundException::new);
+
+        Client client = clientRepository.findById(dto.getClientId())
+                .orElseThrow(ClientNotFoundException::new);
+
+        List<Professional> professionals =
+                professionalRepository.findByProfessionalName(dto.getProfessionalName());
+
+        Professional professional = professionals.stream()
+                .findFirst()
+                .orElseThrow(ProfessionalNotFoundException::new);
+
+
+        modelMapper.map(dto, existing);
+        existing.setId(id);
+        existing.setClient(client);
+        existing.setProfessional(professional);
+
+        Appointment saved = appointmentRepository.save(existing);
+        return modelMapper.map(saved, AppointmentDto.class);
     }
 
     public void delete(long id) throws AppointmentNotFoundException {
@@ -81,12 +94,5 @@ public class AppointmentService {
                 .orElseThrow(AppointmentNotFoundException::new);
 
         appointmentRepository.delete(appointment);
-    }
-
-    public AppointmentOutDto findById(long id) throws AppointmentNotFoundException {
-        Appointment appointment = appointmentRepository.findById(id)
-                .orElseThrow(AppointmentNotFoundException::new);
-
-        return modelMapper.map(appointment, AppointmentOutDto.class);
     }
 }

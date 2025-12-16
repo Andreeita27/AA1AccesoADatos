@@ -1,9 +1,8 @@
 package com.svalero.RosasTattoo.controller;
 
-import com.svalero.RosasTattoo.domain.Appointment;
 import com.svalero.RosasTattoo.domain.enums.AppointmentState;
 import com.svalero.RosasTattoo.dto.AppointmentInDto;
-import com.svalero.RosasTattoo.dto.AppointmentOutDto;
+import com.svalero.RosasTattoo.dto.AppointmentDto;
 import com.svalero.RosasTattoo.exception.AppointmentNotFoundException;
 import com.svalero.RosasTattoo.exception.ClientNotFoundException;
 import com.svalero.RosasTattoo.exception.ErrorResponse;
@@ -28,34 +27,31 @@ public class AppointmentController {
     private AppointmentService appointmentService;
 
     @GetMapping("/appointments")
-    public ResponseEntity<List<AppointmentOutDto>> getAll(
+    public ResponseEntity<List<AppointmentDto>> getAll(
             @RequestParam(required = false) AppointmentState state,
             @RequestParam(required = false) Long clientId,
             @RequestParam(required = false) Long professionalId
     ) {
 
-        return ResponseEntity.ok(appointmentService.findAll(state, clientId, professionalId));
-    }
-
-    @PostMapping("/appointments")
-    public ResponseEntity<Appointment> addAppointment(@Valid @RequestBody AppointmentInDto appointmentInDto)
-            throws ClientNotFoundException, ProfessionalNotFoundException {
-
-        Appointment newAppointment = appointmentService.add(appointmentInDto);
-        return new ResponseEntity<>(newAppointment, HttpStatus.CREATED);
+        List<AppointmentDto> appointments = appointmentService.findAll(state, clientId, professionalId);
+        return ResponseEntity.ok(appointments);
     }
 
     @GetMapping("/appointments/{id}")
-    public ResponseEntity<AppointmentOutDto> getAppointment(@PathVariable long id) throws AppointmentNotFoundException {
-        AppointmentOutDto appointment = appointmentService.findById(id);
-        return ResponseEntity.ok(appointment);
+    public ResponseEntity<AppointmentDto> getAppointment(@PathVariable long id) throws AppointmentNotFoundException {
+        AppointmentDto appointmentDto = appointmentService.findById(id);
+        return ResponseEntity.ok(appointmentDto);
+    }
+
+    @PostMapping("/appointments")
+    public ResponseEntity<AppointmentDto> addAppointment(@Valid @RequestBody AppointmentInDto appointmentInDto) throws ClientNotFoundException, ProfessionalNotFoundException {
+        return new ResponseEntity<>(appointmentService.add(appointmentInDto), HttpStatus.CREATED);
     }
 
     @PutMapping("/appointments/{id}")
-    public ResponseEntity<Appointment> modifyAppointment(@PathVariable long id, @RequestBody AppointmentInDto appointmentInDto)
+    public ResponseEntity<AppointmentDto> modifyAppointment(@PathVariable long id, @Valid @RequestBody AppointmentInDto appointmentInDto)
             throws AppointmentNotFoundException, ClientNotFoundException, ProfessionalNotFoundException {
-
-        Appointment modifiedAppointment = appointmentService.modify(id, appointmentInDto);
+        AppointmentDto modifiedAppointment = appointmentService.modify(id, appointmentInDto);
         return ResponseEntity.ok(modifiedAppointment);
     }
 

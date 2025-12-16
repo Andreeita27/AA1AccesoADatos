@@ -1,6 +1,5 @@
 package com.svalero.RosasTattoo.controller;
 
-import com.svalero.RosasTattoo.domain.Client;
 import com.svalero.RosasTattoo.dto.ClientInDto;
 import com.svalero.RosasTattoo.dto.ClientDto;
 import com.svalero.RosasTattoo.exception.ClientNotFoundException;
@@ -38,7 +37,7 @@ public class ClientController {
     }
 
     @GetMapping("/clients/{id}")
-    public ResponseEntity<ClientDto> get(@PathVariable long id) throws ClientNotFoundException {
+    public ResponseEntity<ClientDto> getClient(@PathVariable long id) throws ClientNotFoundException {
         ClientDto clientDto = clientService.findById(id);
         return ResponseEntity.ok(clientDto);
     }

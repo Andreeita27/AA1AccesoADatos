@@ -2,7 +2,6 @@ package com.svalero.RosasTattoo.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.svalero.RosasTattoo.domain.Client;
 import com.svalero.RosasTattoo.dto.ClientInDto;
 import com.svalero.RosasTattoo.dto.ClientDto;
 import com.svalero.RosasTattoo.exception.ClientNotFoundException;
