@@ -2,7 +2,7 @@ package com.svalero.RosasTattoo.controller;
 
 import com.svalero.RosasTattoo.domain.Client;
 import com.svalero.RosasTattoo.dto.ClientInDto;
-import com.svalero.RosasTattoo.dto.ClientOutDto;
+import com.svalero.RosasTattoo.dto.ClientDto;
 import com.svalero.RosasTattoo.exception.ClientNotFoundException;
 import com.svalero.RosasTattoo.exception.ErrorResponse;
 import com.svalero.RosasTattoo.service.ClientService;
@@ -28,33 +28,31 @@ public class ClientController {
     private ModelMapper modelMapper;
 
     @GetMapping("/clients")
-    public ResponseEntity<List<ClientOutDto>> getAll(
+    public ResponseEntity<List<ClientDto>> getAll(
             @RequestParam(value = "clientName", defaultValue = "") String clientName,
             @RequestParam(value = "clientSurname", defaultValue = "") String clientSurname,
             @RequestParam(value = "showPhoto", required = false) Boolean showPhoto
     ) {
-        List<ClientOutDto> clientsOutDto = clientService.findAll(clientName, clientSurname, showPhoto);
-        return ResponseEntity.ok(clientsOutDto);
+        List<ClientDto> clientsDto = clientService.findAll(clientName, clientSurname, showPhoto);
+        return ResponseEntity.ok(clientsDto);
     }
 
     @GetMapping("/clients/{id}")
-    public ResponseEntity<ClientOutDto> get(@PathVariable long id) throws ClientNotFoundException {
-        ClientOutDto clientOutDto = clientService.findById(id);
-        return ResponseEntity.ok(clientOutDto);
+    public ResponseEntity<ClientDto> get(@PathVariable long id) throws ClientNotFoundException {
+        ClientDto clientDto = clientService.findById(id);
+        return ResponseEntity.ok(clientDto);
     }
 
     @PostMapping("/clients")
-    public ResponseEntity<Client> addClient(@Valid @RequestBody ClientInDto clientInDto) {
-        Client client = modelMapper.map(clientInDto, Client.class);
-        Client newClient = clientService.add(client);
-        return new ResponseEntity<>(newClient, HttpStatus.CREATED);
+    public ResponseEntity<ClientDto> addClient(@Valid @RequestBody ClientInDto clientInDto) {
+        return new ResponseEntity<>(clientService.add(clientInDto), HttpStatus.CREATED);
     }
 
     @PutMapping("/clients/{id}")
-    public ResponseEntity<Client> modifyClient(@PathVariable long id, @RequestBody ClientInDto clientInDto) throws ClientNotFoundException {
-        Client client = modelMapper.map(clientInDto, Client.class);
-        Client newClient = clientService.modify(id, client);
-        return ResponseEntity.ok(newClient);
+    public ResponseEntity<ClientDto> modifyClient(@PathVariable long id, @Valid @RequestBody ClientInDto clientInDto)
+            throws ClientNotFoundException {
+        ClientDto modifiedClient = clientService.modify(id, clientInDto);
+        return ResponseEntity.ok(modifiedClient);
     }
 
     @DeleteMapping("/clients/{id}")

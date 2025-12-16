@@ -1,7 +1,8 @@
 package com.svalero.RosasTattoo.service;
 
 import com.svalero.RosasTattoo.domain.Client;
-import com.svalero.RosasTattoo.dto.ClientOutDto;
+import com.svalero.RosasTattoo.dto.ClientInDto;
+import com.svalero.RosasTattoo.dto.ClientDto;
 import com.svalero.RosasTattoo.exception.ClientNotFoundException;
 import com.svalero.RosasTattoo.repository.ClientRepository;
 import org.modelmapper.ModelMapper;
@@ -19,8 +20,10 @@ public class ClientService {
     @Autowired
     private ModelMapper modelMapper;
 
-    public Client add(Client client) {
-        return clientRepository.save(client);
+    public ClientDto add(ClientInDto clientInDto) {
+        Client client = modelMapper.map(clientInDto, Client.class);
+        Client saved = clientRepository.save(client);
+        return modelMapper.map(saved, ClientDto.class);
     }
 
     public void delete(long id) throws ClientNotFoundException {
@@ -30,26 +33,26 @@ public class ClientService {
         clientRepository.delete(client);
     }
 
-    public List<ClientOutDto> findAll(String name, String surname, Boolean showPhoto) {
+    public List<ClientDto> findAll(String name, String surname, Boolean showPhoto) {
         List<Client> clients = clientRepository.findByFilters(name, surname, showPhoto);
-        return modelMapper.map(clients, new TypeToken<List<ClientOutDto>>() {}.getType());
+        return modelMapper.map(clients, new TypeToken<List<ClientDto>>() {}.getType());
     }
 
-    public ClientOutDto findById(long id) throws ClientNotFoundException {
+    public ClientDto findById(long id) throws ClientNotFoundException {
         Client client = clientRepository.findById(id)
                 .orElseThrow(ClientNotFoundException::new);
 
-        ClientOutDto clientOutDto = modelMapper.map(client, ClientOutDto.class);
-        return clientOutDto;
+        return modelMapper.map(client, ClientDto.class);
     }
-    
-    public Client modify(long id, Client client) throws ClientNotFoundException {
+
+    public ClientDto modify(long id, ClientInDto clientInDto) throws ClientNotFoundException {
         Client existingClient = clientRepository.findById(id)
                 .orElseThrow(ClientNotFoundException::new);
 
-        modelMapper.map(client, existingClient);
+        modelMapper.map(clientInDto, existingClient);
         existingClient.setId(id);
 
-        return clientRepository.save(existingClient);
+        Client saved = clientRepository.save(existingClient);
+        return modelMapper.map(saved, ClientDto.class);
     }
 }
