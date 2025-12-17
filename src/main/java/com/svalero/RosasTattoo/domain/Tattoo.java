@@ -2,6 +2,7 @@ package com.svalero.RosasTattoo.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,17 +22,19 @@ public class Tattoo {
 
     @Column(name = "tattoo_date")
     @JsonFormat(pattern = "yyyy-MM-dd")
+    @NotNull(message = "This field is mandatory")
     private LocalDate tattooDate;
 
     @Column
-    @NotNull
+    @NotBlank(message = "Style is mandatory")
     private String style;
 
     @Column(name = "tattoo_description")
+    @NotBlank(message = "Description is mandatory")
     private String tattooDescription;
 
     @Column(name = "image_url")
-    @NotNull
+    @NotBlank(message = "An image must be uploaded")
     private String imageUrl;
 
     @Column

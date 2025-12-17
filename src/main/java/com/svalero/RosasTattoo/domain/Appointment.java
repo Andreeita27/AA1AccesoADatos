@@ -27,11 +27,11 @@ public class Appointment {
     private LocalDateTime startDateTime;
 
     @Column(name = "body_placement")
-    @NotNull
+    @NotNull(message = "This field is mandatory")
     private String bodyPlacement;
 
     @Column(name = "idea_description")
-    @NotNull
+    @NotNull(message = "You must describe your idea")
     private String ideaDescription;
 
     @Column(name = "first_time")
@@ -51,7 +51,7 @@ public class Appointment {
     private float price;
 
     @Enumerated(EnumType.STRING)
-    @Column
+    @Column (name = "appointment_state")
     private AppointmentState state = AppointmentState.PENDING;
 
     @Column(name = "deposit_paid")

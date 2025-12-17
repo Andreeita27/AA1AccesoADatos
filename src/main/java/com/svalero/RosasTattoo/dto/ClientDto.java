@@ -9,7 +9,8 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ClientOutDto {
+public class ClientDto {
+    private long id;
     private String clientName;
     private String clientSurname;
     private String email;
