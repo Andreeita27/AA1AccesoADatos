@@ -9,7 +9,7 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TattooOutDto {
+public class TattooDto {
     private long id;
     private long clientId;
     private long professionalId;

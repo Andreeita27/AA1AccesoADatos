@@ -1,13 +1,11 @@
 package com.svalero.RosasTattoo.controller;
 
-import com.svalero.RosasTattoo.domain.Professional;
 import com.svalero.RosasTattoo.dto.ProfessionalInDto;
-import com.svalero.RosasTattoo.dto.ProfessionalOutDto;
+import com.svalero.RosasTattoo.dto.ProfessionalDto;
 import com.svalero.RosasTattoo.exception.ErrorResponse;
 import com.svalero.RosasTattoo.exception.ProfessionalNotFoundException;
 import com.svalero.RosasTattoo.service.ProfessionalService;
 import jakarta.validation.Valid;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,37 +22,32 @@ public class ProfessionalController {
 
     @Autowired
     private ProfessionalService professionalService;
-    @Autowired
-    private ModelMapper modelMapper;
 
     @GetMapping("/professionals")
-    public ResponseEntity<List<ProfessionalOutDto>> getAll(
+    public ResponseEntity<List<ProfessionalDto>> getAll(
             @RequestParam(value = "professionalName", required = false) String professionalName,
             @RequestParam(value = "booksOpened", required = false) Boolean booksOpened,
             @RequestParam(value = "yearsExperience", required = false) Integer yearsExperience
     ) {
-        List<ProfessionalOutDto> professionals = professionalService.findAll(professionalName, booksOpened, yearsExperience);
+        List<ProfessionalDto> professionals = professionalService.findAll(professionalName, booksOpened, yearsExperience);
         return ResponseEntity.ok(professionals);
     }
 
     @GetMapping("/professionals/{id}")
-    public ResponseEntity<ProfessionalOutDto> get(@PathVariable long id) throws ProfessionalNotFoundException {
-        ProfessionalOutDto professional = professionalService.findById(id);
+    public ResponseEntity<ProfessionalDto> get(@PathVariable long id) throws ProfessionalNotFoundException {
+        ProfessionalDto professional = professionalService.findById(id);
         return ResponseEntity.ok(professional);
     }
 
     @PostMapping("/professionals")
-    public ResponseEntity<Professional> addProfessional(@Valid @RequestBody ProfessionalInDto professionalInDto) {
-        Professional professional = modelMapper.map(professionalInDto, Professional.class);
-        Professional newProfessional = professionalService.add(professional);
-        return new ResponseEntity<>(newProfessional, HttpStatus.CREATED);
+    public ResponseEntity<ProfessionalDto> addProfessional(@Valid @RequestBody ProfessionalInDto professionalInDto) {
+        return new ResponseEntity<>(professionalService.add(professionalInDto), HttpStatus.CREATED);
     }
 
     @PutMapping("/professionals/{id}")
-    public ResponseEntity<Professional> modifyProfessional(@PathVariable long id, @RequestBody ProfessionalInDto professionalInDto) throws ProfessionalNotFoundException {
-        Professional professional = modelMapper.map(professionalInDto, Professional.class);
-        Professional modifiedProfessional = professionalService.modify(id, professional);
-        return ResponseEntity.ok(modifiedProfessional);
+    public ResponseEntity<ProfessionalDto> modifyProfessional(@PathVariable long id, @Valid @RequestBody ProfessionalInDto professionalInDto)
+            throws ProfessionalNotFoundException {
+        return ResponseEntity.ok(professionalService.modify(id, professionalInDto));
     }
 
     @DeleteMapping("/professionals/{id}")

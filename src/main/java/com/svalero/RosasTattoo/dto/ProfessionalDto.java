@@ -9,7 +9,8 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProfessionalOutDto {
+public class ProfessionalDto {
+    private long id;
     private String professionalName;
     private LocalDate birthDate;
     private String description;

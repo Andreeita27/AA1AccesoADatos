@@ -37,7 +37,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ClientOutDto'
+                  $ref: '#/components/schemas/ClientDto'
         '500':
           description: Internal server error
           content:
@@ -60,19 +60,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Client'
+                $ref: '#/components/schemas/ClientDto'
         '400':
           description: Petición no válida.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/BadRequest'
-        '409':
-          description: Conflicto. Ya existe un cliente con ese email.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Conflict'
         '500':
           description: Internal server error
           content:
@@ -98,7 +92,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ClientOutDto'
+                $ref: '#/components/schemas/ClientDto'
         '404':
           description: Cliente no encontrado.
           content:
@@ -135,7 +129,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Client'
+                $ref: '#/components/schemas/ClientDto'
         '400':
           description: Petición no válida.
           content:
@@ -244,12 +238,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BadRequest'
-        '409':
-          description: Conflicto. Ya existe un profesional con esos datos.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Conflict'
         '500':
           description: Internal server error
           content:
@@ -428,12 +416,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BadRequest'
-        '409':
-          description: Conflicto. Ya existe una cita para ese profesional en ese horario.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Conflict'
         '500':
           description: Internal server error
           content:
@@ -923,33 +905,19 @@ components:
         birthDate: "1998-01-26"
         showPhoto: true
 
-    ClientOutDto:
+    ClientDto:
       allOf:
         - $ref: '#/components/schemas/ClientInDto'
-      type: object
-      properties:
-        visits:
-          type: number
-          format: int64
-          description: Número de visitas realizadas al estudio
-      example:
-        clientName: Andrea
-        clientSurname: Fernandez de la Rosa
-        email: andrea@example.com
-        phone: "+34 601375656"
-        birthDate: "1998-01-26"
-        showPhoto: true
-        visits: 3
-
-    Client:
-      allOf:
-        - $ref: '#/components/schemas/ClientOutDto'
       type: object
       properties:
         id:
           type: number
           format: int64
           description: Identificador único del cliente
+        visits:
+          type: number
+          format: int64
+          description: Número de visitas realizadas al estudio
       example:
         id: 1
         clientName: Andrea

@@ -17,10 +17,10 @@ public interface AppointmentRepository extends CrudRepository<Appointment, Long>
     @Query("SELECT a FROM appointments a WHERE " +
             "(:state IS NULL OR a.state = :state) AND " +
             "(:clientId IS NULL OR a.client.id = :clientId) AND " +
-            "(:profId IS NULL OR a.professional.id = :profId)")
+            "(:professionalId IS NULL OR a.professional.id = :professionalId)")
     List<Appointment> findByFilters(
             @Param("state") AppointmentState state,
             @Param("clientId") Long clientId,
-            @Param("profId") Long profId
+            @Param("professionalId") Long professionalId
     );
 }

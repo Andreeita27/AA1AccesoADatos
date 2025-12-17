@@ -2,7 +2,7 @@ package com.svalero.RosasTattoo.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,15 +20,15 @@ public class Client {
     private long id;
 
     @Column(name = "client_name")
-    @NotNull(message = "Name is mandatory")
+    @NotBlank(message = "Name is mandatory")
     private String clientName;
 
     @Column(name = "client_surname")
-    @NotNull(message = "Surname is mandatory")
+    @NotBlank(message = "Surname is mandatory")
     private String clientSurname;
 
     @Column
-    @NotNull(message = "Email is mandatory")
+    @NotBlank(message = "Email is mandatory")
     private String email;
 
     @Column

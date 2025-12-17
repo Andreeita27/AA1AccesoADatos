@@ -4,7 +4,7 @@ import com.svalero.RosasTattoo.domain.Client;
 import com.svalero.RosasTattoo.domain.Professional;
 import com.svalero.RosasTattoo.domain.Tattoo;
 import com.svalero.RosasTattoo.dto.TattooInDto;
-import com.svalero.RosasTattoo.dto.TattooOutDto;
+import com.svalero.RosasTattoo.dto.TattooDto;
 import com.svalero.RosasTattoo.exception.ClientNotFoundException;
 import com.svalero.RosasTattoo.exception.ProfessionalNotFoundException;
 import com.svalero.RosasTattoo.exception.TattooNotFoundException;
@@ -30,52 +30,57 @@ public class TattooService {
     @Autowired
     private ModelMapper modelMapper;
 
-    public List<TattooOutDto> findAll(String style, Boolean coverUp, Boolean color) {
+    public List<TattooDto> findAll(String style, Boolean coverUp, Boolean color) {
         List<Tattoo> tattoos = tattooRepository.findByFilters(style, coverUp, color);
 
-        return modelMapper.map(tattoos, new TypeToken<List<TattooOutDto>>() {}.getType());
+        return modelMapper.map(tattoos, new TypeToken<List<TattooDto>>() {}.getType());
     }
 
-    public TattooOutDto findById(long id) throws TattooNotFoundException {
-        Tattoo tattoo = tattooRepository.findById(id).orElseThrow(TattooNotFoundException::new);
-        return modelMapper.map(tattoo, TattooOutDto.class);
+    public TattooDto findById(long id) throws TattooNotFoundException {
+        Tattoo tattoo = tattooRepository.findById(id)
+                .orElseThrow(TattooNotFoundException::new);
+
+        return modelMapper.map(tattoo, TattooDto.class);
     }
 
-    public Tattoo add(TattooInDto tattooInDto) throws ClientNotFoundException, ProfessionalNotFoundException {
+    public TattooDto add(TattooInDto tattooInDto) throws ClientNotFoundException, ProfessionalNotFoundException {
         Client client = clientRepository.findById(tattooInDto.getClientId())
                 .orElseThrow(ClientNotFoundException::new);
 
-        List<Professional> professionals = professionalRepository.findByProfessionalName(tattooInDto.getProfessionalName());
-        if (professionals.isEmpty()) throw new ProfessionalNotFoundException();
-        Professional professional = professionals.get(0);
+        Professional professional = professionalRepository.findById(tattooInDto.getProfessionalId())
+                .orElseThrow(ProfessionalNotFoundException::new);
 
-        Tattoo tattoo = new Tattoo();
-        modelMapper.map(tattooInDto, tattoo);
+        Tattoo tattoo = modelMapper.map(tattooInDto, Tattoo.class);
         tattoo.setClient(client);
         tattoo.setProfessional(professional);
-        tattoo.setId(0);
 
-        return tattooRepository.save(tattoo);
+        Tattoo saved = tattooRepository.save(tattoo);
+        return modelMapper.map(saved, TattooDto.class);
     }
 
-    public Tattoo modify(long id, TattooInDto tattooInDto) throws TattooNotFoundException, ClientNotFoundException, ProfessionalNotFoundException {
-        Tattoo tattoo = tattooRepository.findById(id).orElseThrow(TattooNotFoundException::new);
-        Client client = clientRepository.findById(tattooInDto.getClientId()).orElseThrow(ClientNotFoundException::new);
+    public TattooDto modify(long id, TattooInDto tattooInDto) throws TattooNotFoundException, ClientNotFoundException, ProfessionalNotFoundException {
+        Tattoo existing = tattooRepository.findById(id)
+                .orElseThrow(TattooNotFoundException::new);
 
-        List<Professional> professionals = professionalRepository.findByProfessionalName(tattooInDto.getProfessionalName());
-        if (professionals.isEmpty()) throw new ProfessionalNotFoundException();
-        Professional professional = professionals.get(0);
+        Client client = clientRepository.findById(tattooInDto.getClientId())
+                .orElseThrow(ClientNotFoundException::new);
 
-        modelMapper.map(tattooInDto, tattoo);
-        tattoo.setId(id);
-        tattoo.setClient(client);
-        tattoo.setProfessional(professional);
+        Professional professional = professionalRepository.findById(tattooInDto.getProfessionalId())
+                        .orElseThrow(ProfessionalNotFoundException::new);
 
-        return tattooRepository.save(tattoo);
+        modelMapper.map(tattooInDto, existing);
+        existing.setId(id);
+        existing.setClient(client);
+        existing.setProfessional(professional);
+
+        Tattoo saved = tattooRepository.save(existing);
+        return modelMapper.map(saved, TattooDto.class);
     }
 
     public void delete(long id) throws TattooNotFoundException {
-        Tattoo tattoo = tattooRepository.findById(id).orElseThrow(TattooNotFoundException::new);
+        Tattoo tattoo = tattooRepository.findById(id)
+                .orElseThrow(TattooNotFoundException::new);
+
         tattooRepository.delete(tattoo);
     }
 }
