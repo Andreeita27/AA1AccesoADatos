@@ -8,7 +8,6 @@ import com.svalero.RosasTattoo.exception.AppointmentNotFoundException;
 import com.svalero.RosasTattoo.exception.ReviewNotFoundException;
 import com.svalero.RosasTattoo.service.ReviewService;
 import org.junit.jupiter.api.Test;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
