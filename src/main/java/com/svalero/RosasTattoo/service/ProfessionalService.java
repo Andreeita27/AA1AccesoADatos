@@ -40,13 +40,13 @@ public class ProfessionalService {
     }
 
     public ProfessionalDto modify(long id, ProfessionalInDto professionalInDto) throws ProfessionalNotFoundException {
-        Professional existingProfessional = professionalRepository.findById(id)
+        Professional existing = professionalRepository.findById(id)
                 .orElseThrow(ProfessionalNotFoundException::new);
 
-        modelMapper.map(professionalInDto, existingProfessional);
-        existingProfessional.setId(id);
+        modelMapper.map(professionalInDto, existing);
+        existing.setId(id);
 
-        Professional saved = professionalRepository.save(existingProfessional);
+        Professional saved = professionalRepository.save(existing);
         return modelMapper.map(saved, ProfessionalDto.class);
     }
 

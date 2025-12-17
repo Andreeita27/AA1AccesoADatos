@@ -43,19 +43,17 @@ public class AppointmentService {
         return modelMapper.map(appointment, AppointmentDto.class);
     }
 
-    public AppointmentDto add(AppointmentInDto dto) throws ClientNotFoundException, ProfessionalNotFoundException {
-        Client client = clientRepository.findById(dto.getClientId())
+    public AppointmentDto add(AppointmentInDto appointmentInDto) throws ClientNotFoundException, ProfessionalNotFoundException {
+        Client client = clientRepository.findById(appointmentInDto.getClientId())
                 .orElseThrow(ClientNotFoundException::new);
 
-        List<Professional> professionals =
-                professionalRepository.findByProfessionalName(dto.getProfessionalName());
-
-        Professional professional = professionals.stream()
-                .findFirst()
+        Professional professional = professionalRepository.findById(appointmentInDto.getProfessionalId())
                 .orElseThrow(ProfessionalNotFoundException::new);
 
 
-        Appointment appointment = modelMapper.map(dto, Appointment.class);
+        Appointment appointment = new Appointment();
+        modelMapper.map(appointmentInDto, appointment);
+
         appointment.setClient(client);
         appointment.setProfessional(professional);
 
@@ -63,24 +61,19 @@ public class AppointmentService {
         return modelMapper.map(saved, AppointmentDto.class);
     }
 
-    public AppointmentDto modify(long id, AppointmentInDto dto)
+    public AppointmentDto modify(long id, AppointmentInDto appointmentInDto)
             throws AppointmentNotFoundException, ClientNotFoundException, ProfessionalNotFoundException {
 
         Appointment existing = appointmentRepository.findById(id)
                 .orElseThrow(AppointmentNotFoundException::new);
 
-        Client client = clientRepository.findById(dto.getClientId())
+        Client client = clientRepository.findById(appointmentInDto.getClientId())
                 .orElseThrow(ClientNotFoundException::new);
 
-        List<Professional> professionals =
-                professionalRepository.findByProfessionalName(dto.getProfessionalName());
-
-        Professional professional = professionals.stream()
-                .findFirst()
+        Professional professional = professionalRepository.findById(appointmentInDto.getProfessionalId())
                 .orElseThrow(ProfessionalNotFoundException::new);
 
-
-        modelMapper.map(dto, existing);
+        modelMapper.map(appointmentInDto, existing);
         existing.setId(id);
         existing.setClient(client);
         existing.setProfessional(professional);

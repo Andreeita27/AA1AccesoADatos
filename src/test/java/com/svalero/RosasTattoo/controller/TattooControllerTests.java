@@ -2,13 +2,12 @@ package com.svalero.RosasTattoo.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.svalero.RosasTattoo.domain.enums.AppointmentState;
-import com.svalero.RosasTattoo.domain.enums.TattooSize;
-import com.svalero.RosasTattoo.dto.AppointmentDto;
-import com.svalero.RosasTattoo.dto.AppointmentInDto;
-import com.svalero.RosasTattoo.exception.AppointmentNotFoundException;
-import com.svalero.RosasTattoo.service.AppointmentService;
+import com.svalero.RosasTattoo.dto.TattooDto;
+import com.svalero.RosasTattoo.dto.TattooInDto;
+import com.svalero.RosasTattoo.exception.TattooNotFoundException;
+import com.svalero.RosasTattoo.service.TattooService;
 import org.junit.jupiter.api.Test;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
@@ -17,7 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -29,33 +28,33 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(AppointmentController.class)
-public class AppointmentControllerTests {
+@WebMvcTest(TattooController.class)
+public class TattooControllerTests {
 
     @Autowired
     private MockMvc mockMvc;
 
     @MockitoBean
-    private AppointmentService appointmentService;
+    private TattooService tattooService;
 
     @Autowired
     private ObjectMapper objectMapper;
 
     @Test
     public void testGetAll() throws Exception {
-        List<AppointmentDto> appointments = List.of(
-                new AppointmentDto(1L, LocalDateTime.of(2026, 1, 10, 10, 0), "David el Titi", 1L, 1L, "Brazo", "Peonía neotradicional", true, TattooSize.MEDIUM, "peonia.png", 90, 150.0f, AppointmentState.PENDING, false)
+        List<TattooDto> tattoos = List.of(
+                new TattooDto(1L, 1L, 1L, "David el Titi", LocalDate.of(2025, 12, 1), "Neotradicional", "Peonía neotradicional en el brazo", "t1.png", 1, false, true)
         );
 
-        when(appointmentService.findAll(null, null, null)).thenReturn(appointments);
+        when(tattooService.findAll(null, null, null)).thenReturn(tattoos);
 
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/appointments")
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/tattoos")
                         .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
                 .andReturn();
 
         String jsonResponse = result.getResponse().getContentAsString();
-        List<AppointmentDto> listResponse = objectMapper.readValue(jsonResponse, new TypeReference<>() {});
+        List<TattooDto> listResponse = objectMapper.readValue(jsonResponse, new TypeReference<>() {});
 
         assertNotNull(listResponse);
         assertEquals(1, listResponse.size());
@@ -64,17 +63,17 @@ public class AppointmentControllerTests {
 
     @Test
     public void testGetById() throws Exception {
-        AppointmentDto appointmentDto = new AppointmentDto(1L, LocalDateTime.of(2026, 1, 10, 10, 0), "David el Titi", 1L, 1L, "Brazo", "Peonía neotradicional", true, TattooSize.MEDIUM, "peonia.png", 90, 150.0f, AppointmentState.PENDING, false);
+        TattooDto tattooDto = new TattooDto(1L, 1L, 1L, "David el Titi", LocalDate.of(2025, 12, 1), "Neotradicional", "Peonía neotradicional en el brazo", "t1.png", 1, false, true);
 
-        when(appointmentService.findById(1L)).thenReturn(appointmentDto);
+        when(tattooService.findById(1L)).thenReturn(tattooDto);
 
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/appointments/1")
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/tattoos/1")
                         .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
                 .andReturn();
 
         String jsonResponse = result.getResponse().getContentAsString();
-        AppointmentDto response = objectMapper.readValue(jsonResponse, AppointmentDto.class);
+        TattooDto response = objectMapper.readValue(jsonResponse, TattooDto.class);
 
         assertNotNull(response);
         assertEquals(1L, response.getId());
@@ -83,24 +82,24 @@ public class AppointmentControllerTests {
 
     @Test
     public void testGetByIdNotFound() throws Exception {
-        when(appointmentService.findById(999L)).thenThrow(new AppointmentNotFoundException());
+        when(tattooService.findById(999L)).thenThrow(new TattooNotFoundException());
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/appointments/999")
+        mockMvc.perform(MockMvcRequestBuilders.get("/tattoos/999")
                         .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isNotFound());
     }
 
     @Test
-    public void testAddAppointment() throws Exception {
-        AppointmentInDto appointmentInDto = new AppointmentInDto(1L, 1L, LocalDateTime.of(2026, 1, 10, 10, 0), "Brazo", "Peonía neotradicional", true, TattooSize.MEDIUM, "peonia.png");
+    public void testAddTattoo() throws Exception {
+        TattooInDto tattooInDto = new TattooInDto(1L, 1L, LocalDate.of(2025, 12, 1), "Neotradicional", "Peonía neotradicional en el brazo", "t1.png", 1, false, true);
 
-        AppointmentDto savedDto = new AppointmentDto(1L, LocalDateTime.of(2026, 1, 10, 10, 0), "David el Titi", 1L, 1L, "Brazo", "Peonía neotradicional", true, TattooSize.MEDIUM, "peonia.png", 90, 150.0f, AppointmentState.PENDING, false);
+        TattooDto savedDto = new TattooDto(1L, 1L, 1L, "David el Titi", LocalDate.of(2025, 12, 1), "Neotradicional", "Peonía neotradicional en el brazo", "t1.png", 1, false, true);
 
-        when(appointmentService.add(any(AppointmentInDto.class))).thenReturn(savedDto);
+        when(tattooService.add(any(TattooInDto.class))).thenReturn(savedDto);
 
-        String jsonBody = objectMapper.writeValueAsString(appointmentInDto);
+        String jsonBody = objectMapper.writeValueAsString(tattooInDto);
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/appointments")
+        mockMvc.perform(MockMvcRequestBuilders.post("/tattoos")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonBody)
                         .accept(MediaType.APPLICATION_JSON_VALUE))
@@ -111,10 +110,10 @@ public class AppointmentControllerTests {
     }
 
     @Test
-    public void testAddAppointmentBadRequest() throws Exception {
+    public void testAddTattooBadRequest() throws Exception {
         String badJson = "{}";
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/appointments")
+        mockMvc.perform(MockMvcRequestBuilders.post("/tattoos")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(badJson)
                         .accept(MediaType.APPLICATION_JSON_VALUE))
@@ -123,15 +122,15 @@ public class AppointmentControllerTests {
 
     @Test
     public void testModifyOk() throws Exception {
-        AppointmentInDto appointmentInDto = new AppointmentInDto(1L, 1L, LocalDateTime.of(2026, 1, 10, 10, 0), "Brazo", "Peonía neotradicional", true, TattooSize.MEDIUM, "peonia.png");
+        TattooInDto tattooInDto = new TattooInDto(1L, 1L, LocalDate.of(2025, 12, 1), "Neotradicional", "Peonía neotradicional en el brazo", "t1.png", 1, false, true);
 
-        AppointmentDto response = new AppointmentDto(1L, LocalDateTime.of(2026, 1, 10, 10, 0), "David el Titi", 1L, 1L, "Brazo", "Peonía neotradicional modificado", true, TattooSize.MEDIUM, "peonia.png", 90, 150.0f, AppointmentState.PENDING, false);
+        TattooDto response = new TattooDto(1L, 1L, 1L, "David el Titi", LocalDate.of(2025, 12, 1), "Neotradicional", "Peonía neotradicional en el brazo modificado", "t1.png", 1, false, true);
 
-        when(appointmentService.modify(eq(1L), any(AppointmentInDto.class))).thenReturn(response);
+        when(tattooService.modify(eq(1L), any(TattooInDto.class))).thenReturn(response);
 
-        mockMvc.perform(MockMvcRequestBuilders.put("/appointments/1")
+        mockMvc.perform(MockMvcRequestBuilders.put("/tattoos/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(appointmentInDto)))
+                        .content(objectMapper.writeValueAsString(tattooInDto)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L))
                 .andExpect(jsonPath("$.professionalName").value("David el Titi"));
@@ -139,14 +138,14 @@ public class AppointmentControllerTests {
 
     @Test
     public void testModifyNotFound() throws Exception {
-        AppointmentInDto appointmentInDto = new AppointmentInDto(1L, 1L, LocalDateTime.of(2026, 1, 10, 10, 0), "Brazo", "Peonía neotradicional", true, TattooSize.MEDIUM, "peonia.png");
+        TattooInDto tattooInDto = new TattooInDto(1L, 1L, LocalDate.of(2025, 12, 1), "Neotradicional", "Peonía neotradicional en el brazo", "t1.png", 1, false, true);
 
-        when(appointmentService.modify(eq(1L), any(AppointmentInDto.class)))
-                .thenThrow(new AppointmentNotFoundException());
+        when(tattooService.modify(eq(1L), any(TattooInDto.class)))
+                .thenThrow(new TattooNotFoundException());
 
-        mockMvc.perform(MockMvcRequestBuilders.put("/appointments/1")
+        mockMvc.perform(MockMvcRequestBuilders.put("/tattoos/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(appointmentInDto)))
+                        .content(objectMapper.writeValueAsString(tattooInDto)))
                 .andExpect(status().isNotFound());
     }
 
@@ -154,7 +153,7 @@ public class AppointmentControllerTests {
     public void testModifyBadRequest() throws Exception {
         String badJson = "{}";
 
-        mockMvc.perform(MockMvcRequestBuilders.put("/appointments/1")
+        mockMvc.perform(MockMvcRequestBuilders.put("/tattoos/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(badJson))
                 .andExpect(status().isBadRequest());
@@ -162,15 +161,15 @@ public class AppointmentControllerTests {
 
     @Test
     public void testDeleteOk() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.delete("/appointments/1"))
+        mockMvc.perform(MockMvcRequestBuilders.delete("/tattoos/1"))
                 .andExpect(status().isNoContent());
     }
 
     @Test
     public void testDeleteNotFound() throws Exception {
-        doThrow(new AppointmentNotFoundException()).when(appointmentService).delete(1L);
+        doThrow(new TattooNotFoundException()).when(tattooService).delete(1L);
 
-        mockMvc.perform(MockMvcRequestBuilders.delete("/appointments/1"))
+        mockMvc.perform(MockMvcRequestBuilders.delete("/tattoos/1"))
                 .andExpect(status().isNotFound());
     }
 }

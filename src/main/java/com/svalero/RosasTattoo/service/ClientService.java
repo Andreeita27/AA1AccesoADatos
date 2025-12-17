@@ -39,13 +39,13 @@ public class ClientService {
     }
 
     public ClientDto modify(long id, ClientInDto clientInDto) throws ClientNotFoundException {
-        Client existingClient = clientRepository.findById(id)
+        Client existing = clientRepository.findById(id)
                 .orElseThrow(ClientNotFoundException::new);
 
-        modelMapper.map(clientInDto, existingClient);
-        existingClient.setId(id);
+        modelMapper.map(clientInDto, existing);
+        existing.setId(id);
 
-        Client saved = clientRepository.save(existingClient);
+        Client saved = clientRepository.save(existing);
         return modelMapper.map(saved, ClientDto.class);
     }
 

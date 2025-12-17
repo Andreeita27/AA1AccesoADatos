@@ -2,8 +2,9 @@ package com.svalero.RosasTattoo.service;
 
 import com.svalero.RosasTattoo.domain.Appointment;
 import com.svalero.RosasTattoo.domain.Review;
+import com.svalero.RosasTattoo.domain.enums.AppointmentState;
+import com.svalero.RosasTattoo.dto.ReviewDto;
 import com.svalero.RosasTattoo.dto.ReviewInDto;
-import com.svalero.RosasTattoo.dto.ReviewOutDto;
 import com.svalero.RosasTattoo.exception.AppointmentNotFoundException;
 import com.svalero.RosasTattoo.exception.ReviewNotFoundException;
 import com.svalero.RosasTattoo.repository.AppointmentRepository;
@@ -22,21 +23,23 @@ public class ReviewService {
     @Autowired
     private ReviewRepository reviewRepository;
     @Autowired
-    private AppointmentRepository appointmentRepository; // Necesario para buscar la cita
+    private AppointmentRepository appointmentRepository;
     @Autowired
     private ModelMapper modelMapper;
 
-    public List<ReviewOutDto> findAll(Integer rating, Long professionalId, Boolean wouldRecommend) {
+    public List<ReviewDto> findAll(Integer rating, Long professionalId, Boolean wouldRecommend) {
         List<Review> reviews = reviewRepository.findByFilters(rating, professionalId, wouldRecommend);
-        return modelMapper.map(reviews, new TypeToken<List<ReviewOutDto>>() {}.getType());
+        return modelMapper.map(reviews, new TypeToken<List<ReviewDto>>() {}.getType());
     }
 
-    public ReviewOutDto findById(long id) throws ReviewNotFoundException {
-        Review review = reviewRepository.findById(id).orElseThrow(ReviewNotFoundException::new);
-        return modelMapper.map(review, ReviewOutDto.class);
+    public ReviewDto findById(long id) throws ReviewNotFoundException {
+        Review review = reviewRepository.findById(id)
+                .orElseThrow(ReviewNotFoundException::new);
+
+        return modelMapper.map(review, ReviewDto.class);
     }
 
-    public Review add(ReviewInDto reviewInDto) throws AppointmentNotFoundException {
+    public ReviewDto add(ReviewInDto reviewInDto) throws AppointmentNotFoundException {
         Appointment appointment = appointmentRepository.findById(reviewInDto.getAppointmentId())
                 .orElseThrow(AppointmentNotFoundException::new);
 
@@ -45,23 +48,36 @@ public class ReviewService {
 
         review.setAppointment(appointment);
         review.setCreatedAt(LocalDateTime.now());
-        review.setId(0);
 
-        return reviewRepository.save(review);
+        Review saved = reviewRepository.save(review);
+
+        appointment.setState(AppointmentState.COMPLETED);
+        appointmentRepository.save(appointment);
+
+        return modelMapper.map(saved, ReviewDto.class);
     }
 
-    public Review modify(long id, ReviewInDto reviewInDto) throws ReviewNotFoundException {
-        Review review = reviewRepository.findById(id).orElseThrow(ReviewNotFoundException::new);
+    public ReviewDto modify(long id, ReviewInDto reviewInDto) throws ReviewNotFoundException {
+        Review existing = reviewRepository.findById(id)
+                .orElseThrow(ReviewNotFoundException::new);
 
-        review.setRating(reviewInDto.getRating());
-        review.setComment(reviewInDto.getComment());
-        review.setWouldRecommend(reviewInDto.isWouldRecommend());
+        // Para que nunca se pierda la relación ni se toque createdAt
+        Appointment keepAppointment = existing.getAppointment();
+        LocalDateTime keepCreatedAt = existing.getCreatedAt();
 
-        return reviewRepository.save(review);
+        modelMapper.map(reviewInDto, existing);
+        existing.setId(id);
+        existing.setAppointment(keepAppointment);
+        existing.setCreatedAt(keepCreatedAt);
+
+        Review saved = reviewRepository.save(existing);
+        return modelMapper.map(saved, ReviewDto.class);
     }
 
     public void delete(long id) throws ReviewNotFoundException {
-        Review review = reviewRepository.findById(id).orElseThrow(ReviewNotFoundException::new);
+        Review review = reviewRepository.findById(id)
+                .orElseThrow(ReviewNotFoundException::new);
+
         reviewRepository.delete(review);
     }
 }

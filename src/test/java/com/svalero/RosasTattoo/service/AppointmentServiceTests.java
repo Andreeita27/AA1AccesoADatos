@@ -103,7 +103,7 @@ public class AppointmentServiceTests {
 
     @Test
     public void testAdd() throws ClientNotFoundException, ProfessionalNotFoundException {
-        AppointmentInDto appointmentInDto = new AppointmentInDto(1L, "David el Titi", LocalDateTime.of(2026, 1, 10, 10, 0), "Brazo", "Peonía neotradicional", true, TattooSize.MEDIUM, "peonia.png");
+        AppointmentInDto appointmentInDto = new AppointmentInDto(1L, 1L, LocalDateTime.of(2026, 1, 10, 10, 0), "Brazo", "Peonía neotradicional", true, TattooSize.MEDIUM, "peonia.png");
 
         Client andrea = new Client(1L, "Andrea", "Fernandez", "andrea@example.com", "601375656", LocalDate.of(1998, 1, 26), true, 0);
 
@@ -118,9 +118,10 @@ public class AppointmentServiceTests {
         AppointmentDto savedDto = new AppointmentDto(1L, LocalDateTime.of(2026, 1, 10, 10, 0), "David el Titi", 1L, 1L, "Brazo", "Peonía neotradicional", true, TattooSize.MEDIUM, "peonia.png", 90, 150.0f, AppointmentState.PENDING, false);
 
         when(clientRepository.findById(eq(1L))).thenReturn(Optional.of(andrea));
-        when(professionalRepository.findByProfessionalName(eq("David el Titi"))).thenReturn(List.of(titi));
+        when(professionalRepository.findById(1L)).thenReturn(Optional.of(titi));
 
-        when(modelMapper.map(any(AppointmentInDto.class), eq(Appointment.class))).thenReturn(mapped);
+        doNothing().when(modelMapper).map(any(AppointmentInDto.class), any(Appointment.class));
+
         when(appointmentRepository.save(any(Appointment.class))).thenReturn(saved);
         when(modelMapper.map(any(Appointment.class), eq(AppointmentDto.class))).thenReturn(savedDto);
 
@@ -136,7 +137,7 @@ public class AppointmentServiceTests {
     public void testAddClientNotFound() {
         AppointmentInDto appointmentInDto = new AppointmentInDto();
         appointmentInDto.setClientId(999L);
-        appointmentInDto.setProfessionalName("David el Titi");
+        appointmentInDto.setProfessionalId(1L);
 
         when(clientRepository.findById(999L)).thenReturn(Optional.empty());
 
@@ -151,23 +152,23 @@ public class AppointmentServiceTests {
     public void testAddProfessionalNotFound() {
         AppointmentInDto appointmentInDto = new AppointmentInDto();
         appointmentInDto.setClientId(1L);
-        appointmentInDto.setProfessionalName("David el Titi");
+        appointmentInDto.setProfessionalId(1L);
 
         Client andrea = new Client(1L, "Andrea", "Fernandez", "andrea@example.com", "601375656", LocalDate.of(1998, 1, 26), true, 0);
 
         when(clientRepository.findById(1L)).thenReturn(Optional.of(andrea));
-        when(professionalRepository.findByProfessionalName("David el Titi")).thenReturn(List.of());
+        when(professionalRepository.findById(1L)).thenReturn(Optional.empty());
 
         assertThrows(ProfessionalNotFoundException.class, () -> {
             appointmentService.add(appointmentInDto);
         });
 
-        verify(professionalRepository, times(1)).findByProfessionalName("David el Titi");
+        verify(professionalRepository, times(1)).findById(1L);
     }
 
     @Test
     public void testModify() throws AppointmentNotFoundException, ClientNotFoundException, ProfessionalNotFoundException {
-        AppointmentInDto appointmentInDto = new AppointmentInDto(1L, "David el Titi", LocalDateTime.of(2026, 1, 10, 10, 0), "Brazo", "Peonía neotradicional", true, TattooSize.MEDIUM, "peonia.png");
+        AppointmentInDto appointmentInDto = new AppointmentInDto(1L, 1L, LocalDateTime.of(2026, 1, 10, 10, 0), "Brazo", "Peonía neotradicional", true, TattooSize.MEDIUM, "peonia.png");
 
         Client andrea = new Client(1L, "Andrea", "Fernandez", "andrea@example.com", "601375656", LocalDate.of(1998, 1, 26), true, 0);
 
@@ -183,7 +184,7 @@ public class AppointmentServiceTests {
 
         when(appointmentRepository.findById(1L)).thenReturn(Optional.of(existing));
         when(clientRepository.findById(1L)).thenReturn(Optional.of(andrea));
-        when(professionalRepository.findByProfessionalName("David el Titi")).thenReturn(List.of(titi));
+        when(professionalRepository.findById(1L)).thenReturn(Optional.of(titi));
 
         when(appointmentRepository.save(any(Appointment.class))).thenReturn(updated);
         when(modelMapper.map(eq(updated), eq(AppointmentDto.class))).thenReturn(updatedDto);
@@ -202,7 +203,7 @@ public class AppointmentServiceTests {
     public void testModifyNotFound() {
         AppointmentInDto appointmentInDto = new AppointmentInDto();
         appointmentInDto.setClientId(1L);
-        appointmentInDto.setProfessionalName("David el Titi");
+        appointmentInDto.setProfessionalId(1L);
 
         when(appointmentRepository.findById(999L)).thenReturn(Optional.empty());
 

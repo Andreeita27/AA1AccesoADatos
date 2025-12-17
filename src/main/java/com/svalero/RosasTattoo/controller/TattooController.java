@@ -2,7 +2,7 @@ package com.svalero.RosasTattoo.controller;
 
 import com.svalero.RosasTattoo.domain.Tattoo;
 import com.svalero.RosasTattoo.dto.TattooInDto;
-import com.svalero.RosasTattoo.dto.TattooOutDto;
+import com.svalero.RosasTattoo.dto.TattooDto;
 import com.svalero.RosasTattoo.exception.ClientNotFoundException;
 import com.svalero.RosasTattoo.exception.ErrorResponse;
 import com.svalero.RosasTattoo.exception.ProfessionalNotFoundException;
@@ -23,26 +23,26 @@ public class TattooController {
     private TattooService tattooService;
 
     @GetMapping("/tattoos")
-    public ResponseEntity<List<TattooOutDto>> getAll(
-            @RequestParam(required = false) String style,
-            @RequestParam(required = false) Boolean coverUp,
-            @RequestParam(required = false) Boolean color) {
+    public ResponseEntity<List<TattooDto>> getAll(
+            @RequestParam(value = "style", required = false) String style,
+            @RequestParam(value = "coverUp", required = false) Boolean coverUp,
+            @RequestParam(value = "color", required = false) Boolean color) {
         return ResponseEntity.ok(tattooService.findAll(style, coverUp, color));
     }
 
     @GetMapping("/tattoos/{id}")
-    public ResponseEntity<TattooOutDto> getTattoo(@PathVariable long id) throws TattooNotFoundException {
+    public ResponseEntity<TattooDto> getTattoo(@PathVariable long id) throws TattooNotFoundException {
         return ResponseEntity.ok(tattooService.findById(id));
     }
 
     @PostMapping("/tattoos")
-    public ResponseEntity<Tattoo> addTattoo(@Valid @RequestBody TattooInDto tattooInDto)
+    public ResponseEntity<TattooDto> addTattoo(@Valid @RequestBody TattooInDto tattooInDto)
             throws ClientNotFoundException, ProfessionalNotFoundException {
         return new ResponseEntity<>(tattooService.add(tattooInDto), HttpStatus.CREATED);
     }
 
     @PutMapping("/tattoos/{id}")
-    public ResponseEntity<Tattoo> modifyTattoo(@PathVariable long id, @RequestBody TattooInDto tattooInDto)
+    public ResponseEntity<TattooDto> modifyTattoo(@PathVariable long id, @Valid @RequestBody TattooInDto tattooInDto)
             throws TattooNotFoundException, ClientNotFoundException, ProfessionalNotFoundException {
         return ResponseEntity.ok(tattooService.modify(id, tattooInDto));
     }

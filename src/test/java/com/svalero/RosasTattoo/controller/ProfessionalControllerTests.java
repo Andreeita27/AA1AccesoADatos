@@ -45,12 +45,12 @@ public class ProfessionalControllerTests {
 
     @Test
     public void testGetAll() throws Exception {
-        List<ProfessionalDto> professionalsDto = List.of(
+        List<ProfessionalDto> professionals = List.of(
                 new ProfessionalDto(1L, "David el Titi", LocalDate.of(1986, 12, 5), "Neotradicional", "titi.png", true, 15),
                 new ProfessionalDto(2L, "Acerete", LocalDate.of(1995, 2, 2), "Tradicional", "acerete.png", false, 2)
         );
 
-        when(professionalService.findAll(null, null, null)).thenReturn(professionalsDto);
+        when(professionalService.findAll(null, null, null)).thenReturn(professionals);
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/professionals")
                         .accept(MediaType.APPLICATION_JSON_VALUE))

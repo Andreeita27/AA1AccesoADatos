@@ -1,19 +1,23 @@
 package com.svalero.RosasTattoo.controller;
 
-import com.svalero.RosasTattoo.domain.Review;
+import com.svalero.RosasTattoo.dto.ReviewDto;
 import com.svalero.RosasTattoo.dto.ReviewInDto;
-import com.svalero.RosasTattoo.dto.ReviewOutDto;
 import com.svalero.RosasTattoo.exception.AppointmentNotFoundException;
 import com.svalero.RosasTattoo.exception.ErrorResponse;
 import com.svalero.RosasTattoo.exception.ReviewNotFoundException;
 import com.svalero.RosasTattoo.service.ReviewService;
 import jakarta.validation.Valid;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class ReviewController {
@@ -22,27 +26,26 @@ public class ReviewController {
     private ReviewService reviewService;
 
     @GetMapping("/reviews")
-    public ResponseEntity<List<ReviewOutDto>> getAll(
-            @RequestParam(required = false) Integer rating,
-            @RequestParam(required = false) Long professionalId,
-            @RequestParam(required = false) Boolean wouldRecommend) {
+    public ResponseEntity<List<ReviewDto>> getAll(
+            @RequestParam(value = "rating", required = false) Integer rating,
+            @RequestParam(value = "professionalId", required = false) Long professionalId,
+            @RequestParam(value = "wouldRecommend", required = false) Boolean wouldRecommend
+    ) {
         return ResponseEntity.ok(reviewService.findAll(rating, professionalId, wouldRecommend));
     }
 
     @GetMapping("/reviews/{id}")
-    public ResponseEntity<ReviewOutDto> getReview(@PathVariable long id) throws ReviewNotFoundException {
+    public ResponseEntity<ReviewDto> getReview(@PathVariable long id) throws ReviewNotFoundException {
         return ResponseEntity.ok(reviewService.findById(id));
     }
 
     @PostMapping("/reviews")
-    public ResponseEntity<Review> addReview(@Valid @RequestBody ReviewInDto reviewInDto)
-            throws AppointmentNotFoundException {
+    public ResponseEntity<ReviewDto> addReview(@Valid @RequestBody ReviewInDto reviewInDto) throws AppointmentNotFoundException {
         return new ResponseEntity<>(reviewService.add(reviewInDto), HttpStatus.CREATED);
     }
 
     @PutMapping("/reviews/{id}")
-    public ResponseEntity<Review> modifyReview(@PathVariable long id, @RequestBody ReviewInDto reviewInDto)
-            throws ReviewNotFoundException {
+    public ResponseEntity<ReviewDto> modifyReview(@PathVariable long id, @Valid @RequestBody ReviewInDto reviewInDto) throws ReviewNotFoundException {
         return ResponseEntity.ok(reviewService.modify(id, reviewInDto));
     }
 
@@ -53,7 +56,23 @@ public class ReviewController {
     }
 
     @ExceptionHandler(ReviewNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleReviewException(ReviewNotFoundException rnfe) {
+    public ResponseEntity<ErrorResponse> handleException(ReviewNotFoundException rnfe) {
         return new ResponseEntity<>(ErrorResponse.notFound(rnfe.getMessage()), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(AppointmentNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleException(AppointmentNotFoundException anfe) {
+        return new ResponseEntity<>(ErrorResponse.notFound(anfe.getMessage()), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> handleException(MethodArgumentNotValidException manve) {
+        Map<String, String> errors = new HashMap<>();
+        manve.getBindingResult().getAllErrors().forEach(error -> {
+            String fieldName = ((FieldError) error).getField();
+            String message = error.getDefaultMessage();
+            errors.put(fieldName, message);
+        });
+        return new ResponseEntity<>(ErrorResponse.validationError(errors), HttpStatus.BAD_REQUEST);
     }
 }

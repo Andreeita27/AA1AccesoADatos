@@ -31,7 +31,7 @@ public class Appointment {
     private String bodyPlacement;
 
     @Column(name = "idea_description")
-    @NotNull(message = "This field is mandatory")
+    @NotNull(message = "You must describe your idea")
     private String ideaDescription;
 
     @Column(name = "first_time")

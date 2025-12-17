@@ -16,8 +16,7 @@ import java.time.LocalDateTime;
 public class AppointmentInDto {
 
     private long clientId;
-
-    private String professionalName;
+    private long professionalId;
 
     @NotNull(message = "This field is mandatory")
     private LocalDateTime startDateTime;
@@ -25,7 +24,7 @@ public class AppointmentInDto {
     @NotNull(message = "This field is mandatory")
     private String bodyPlacement;
 
-    @NotNull(message = "This field is mandatory")
+    @NotNull(message = "You must describe your idea")
     private String ideaDescription;
 
     private boolean firstTime;
