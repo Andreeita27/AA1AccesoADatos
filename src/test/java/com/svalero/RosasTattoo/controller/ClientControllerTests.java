@@ -45,12 +45,12 @@ public class ClientControllerTests {
 
     @Test
     public void testGetAll() throws Exception {
-        List<ClientDto> clientsOutDto = List.of(
+        List<ClientDto> clients = List.of(
                 new ClientDto(1L, "Andrea", "Fernandez", "andrea@example.com", "601375656", LocalDate.of(1998, 1, 26), true, 3),
                 new ClientDto(2L, "Pepe", "Garcia", "pepe@example.com", "600999888", LocalDate.of(1990, 5, 20), false, 0)
         );
 
-        when(clientService.findAll("", "", null)).thenReturn(clientsOutDto);
+        when(clientService.findAll("", "", null)).thenReturn(clients);
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/clients")
                         .accept(MediaType.APPLICATION_JSON_VALUE))
@@ -67,9 +67,9 @@ public class ClientControllerTests {
 
     @Test
     public void testGetById() throws Exception {
-        ClientDto clientDto = new ClientDto(1L, "Andrea", "Fernandez", "andrea@example.com", "601375656", LocalDate.of(1998, 1, 26), true, 3);
+        ClientDto client = new ClientDto(1L, "Andrea", "Fernandez", "andrea@example.com", "601375656", LocalDate.of(1998, 1, 26), true, 3);
 
-        when(clientService.findById(1)).thenReturn(clientDto);
+        when(clientService.findById(1)).thenReturn(client);
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/clients/1")
                         .accept(MediaType.APPLICATION_JSON_VALUE))
@@ -124,7 +124,7 @@ public class ClientControllerTests {
 
     @Test
     public void testModifyOk() throws Exception {
-        ClientInDto dto = new ClientInDto("Andrea Modificada","Fernandez","andrea@example.com","601375656", LocalDate.of(1998,1,26), true);
+        ClientInDto dto = new ClientInDto("Andrea","Fernandez","andrea@example.com","601375656", LocalDate.of(1998,1,26), true);
 
         ClientDto response = new ClientDto(1L,"Andrea Modificada","Fernandez","andrea@example.com","601375656", LocalDate.of(1998,1,26), true, 3);
 

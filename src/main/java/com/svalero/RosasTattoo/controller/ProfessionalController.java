@@ -1,13 +1,11 @@
 package com.svalero.RosasTattoo.controller;
 
-import com.svalero.RosasTattoo.domain.Professional;
 import com.svalero.RosasTattoo.dto.ProfessionalInDto;
 import com.svalero.RosasTattoo.dto.ProfessionalDto;
 import com.svalero.RosasTattoo.exception.ErrorResponse;
 import com.svalero.RosasTattoo.exception.ProfessionalNotFoundException;
 import com.svalero.RosasTattoo.service.ProfessionalService;
 import jakarta.validation.Valid;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,8 +22,6 @@ public class ProfessionalController {
 
     @Autowired
     private ProfessionalService professionalService;
-    @Autowired
-    private ModelMapper modelMapper;
 
     @GetMapping("/professionals")
     public ResponseEntity<List<ProfessionalDto>> getAll(

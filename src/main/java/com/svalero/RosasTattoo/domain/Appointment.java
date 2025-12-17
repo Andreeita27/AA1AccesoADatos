@@ -51,7 +51,7 @@ public class Appointment {
     private float price;
 
     @Enumerated(EnumType.STRING)
-    @Column
+    @Column (name = "appointment_state")
     private AppointmentState state = AppointmentState.PENDING;
 
     @Column(name = "deposit_paid")

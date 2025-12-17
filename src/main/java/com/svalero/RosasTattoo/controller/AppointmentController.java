@@ -28,9 +28,9 @@ public class AppointmentController {
 
     @GetMapping("/appointments")
     public ResponseEntity<List<AppointmentDto>> getAll(
-            @RequestParam(required = false) AppointmentState state,
-            @RequestParam(required = false) Long clientId,
-            @RequestParam(required = false) Long professionalId
+            @RequestParam(value = "appointmentState", required = false) AppointmentState state,
+            @RequestParam(value = "clientId", required = false) Long clientId,
+            @RequestParam(value = "professionalId", required = false) Long professionalId
     ) {
 
         List<AppointmentDto> appointments = appointmentService.findAll(state, clientId, professionalId);
@@ -39,8 +39,8 @@ public class AppointmentController {
 
     @GetMapping("/appointments/{id}")
     public ResponseEntity<AppointmentDto> getAppointment(@PathVariable long id) throws AppointmentNotFoundException {
-        AppointmentDto appointmentDto = appointmentService.findById(id);
-        return ResponseEntity.ok(appointmentDto);
+        AppointmentDto appointment = appointmentService.findById(id);
+        return ResponseEntity.ok(appointment);
     }
 
     @PostMapping("/appointments")

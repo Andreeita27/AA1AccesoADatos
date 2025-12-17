@@ -6,7 +6,6 @@ import com.svalero.RosasTattoo.exception.ClientNotFoundException;
 import com.svalero.RosasTattoo.exception.ErrorResponse;
 import com.svalero.RosasTattoo.service.ClientService;
 import jakarta.validation.Valid;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,8 +22,6 @@ public class ClientController {
 
     @Autowired
     private ClientService clientService;
-    @Autowired
-    private ModelMapper modelMapper;
 
     @GetMapping("/clients")
     public ResponseEntity<List<ClientDto>> getAll(
@@ -32,14 +29,14 @@ public class ClientController {
             @RequestParam(value = "clientSurname", defaultValue = "") String clientSurname,
             @RequestParam(value = "showPhoto", required = false) Boolean showPhoto
     ) {
-        List<ClientDto> clientsDto = clientService.findAll(clientName, clientSurname, showPhoto);
-        return ResponseEntity.ok(clientsDto);
+        List<ClientDto> clients = clientService.findAll(clientName, clientSurname, showPhoto);
+        return ResponseEntity.ok(clients);
     }
 
     @GetMapping("/clients/{id}")
     public ResponseEntity<ClientDto> getClient(@PathVariable long id) throws ClientNotFoundException {
-        ClientDto clientDto = clientService.findById(id);
-        return ResponseEntity.ok(clientDto);
+        ClientDto client = clientService.findById(id);
+        return ResponseEntity.ok(client);
     }
 
     @PostMapping("/clients")

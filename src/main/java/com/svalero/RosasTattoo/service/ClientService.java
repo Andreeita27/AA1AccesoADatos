@@ -20,19 +20,6 @@ public class ClientService {
     @Autowired
     private ModelMapper modelMapper;
 
-    public ClientDto add(ClientInDto clientInDto) {
-        Client client = modelMapper.map(clientInDto, Client.class);
-        Client saved = clientRepository.save(client);
-        return modelMapper.map(saved, ClientDto.class);
-    }
-
-    public void delete(long id) throws ClientNotFoundException {
-        Client client = clientRepository.findById(id)
-                .orElseThrow(ClientNotFoundException::new);
-
-        clientRepository.delete(client);
-    }
-
     public List<ClientDto> findAll(String name, String surname, Boolean showPhoto) {
         List<Client> clients = clientRepository.findByFilters(name, surname, showPhoto);
         return modelMapper.map(clients, new TypeToken<List<ClientDto>>() {}.getType());
@@ -45,6 +32,12 @@ public class ClientService {
         return modelMapper.map(client, ClientDto.class);
     }
 
+    public ClientDto add(ClientInDto clientInDto) {
+        Client client = modelMapper.map(clientInDto, Client.class);
+        Client saved = clientRepository.save(client);
+        return modelMapper.map(saved, ClientDto.class);
+    }
+
     public ClientDto modify(long id, ClientInDto clientInDto) throws ClientNotFoundException {
         Client existingClient = clientRepository.findById(id)
                 .orElseThrow(ClientNotFoundException::new);
@@ -54,5 +47,12 @@ public class ClientService {
 
         Client saved = clientRepository.save(existingClient);
         return modelMapper.map(saved, ClientDto.class);
+    }
+
+    public void delete(long id) throws ClientNotFoundException {
+        Client client = clientRepository.findById(id)
+                .orElseThrow(ClientNotFoundException::new);
+
+        clientRepository.delete(client);
     }
 }
