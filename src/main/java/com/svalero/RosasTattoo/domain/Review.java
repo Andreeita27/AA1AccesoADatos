@@ -5,12 +5,12 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
+@Setter
+@Getter
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -40,4 +40,5 @@ public class Review {
     @JoinColumn(name = "appointment_id")
     @NotNull(message = "Appointment is mandatory")
     private Appointment appointment;
+
 }
