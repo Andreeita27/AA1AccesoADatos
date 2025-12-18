@@ -19,6 +19,7 @@ public class ProfessionalInDto {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthDate;
 
+    @NotBlank(message = "A description must be provided")
     private String description;
 
     private String profilePhoto;

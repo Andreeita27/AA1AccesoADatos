@@ -29,6 +29,7 @@ public class Professional {
     private LocalDate birthDate;
 
     @Column
+    @NotBlank(message = "A description must be provided")
     private String description;
 
     @Column(name = "profile_photo")

@@ -28,7 +28,7 @@ public class AppointmentController {
 
     @GetMapping("/appointments")
     public ResponseEntity<List<AppointmentDto>> getAll(
-            @RequestParam(value = "appointmentState", required = false) AppointmentState state,
+            @RequestParam(value = "state", required = false) AppointmentState state,
             @RequestParam(value = "clientId", required = false) Long clientId,
             @RequestParam(value = "professionalId", required = false) Long professionalId
     ) {

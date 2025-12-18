@@ -1,5 +1,6 @@
 package com.svalero.RosasTattoo.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -12,10 +13,15 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TattooInDto {
+
+    @NotNull(message = "Client is mandatory")
     private long clientId;
+
+    @NotNull(message = "Professional is mandatory")
     private long professionalId;
 
     @NotNull(message = "This field is mandatory")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate tattooDate;
 
     @NotBlank(message = "Style is mandatory")
