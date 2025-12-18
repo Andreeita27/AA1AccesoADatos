@@ -2,12 +2,12 @@ package com.svalero.RosasTattoo.dto;
 
 import com.svalero.RosasTattoo.domain.enums.AppointmentState;
 import com.svalero.RosasTattoo.domain.enums.TattooSize;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
+@Setter
+@Getter
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

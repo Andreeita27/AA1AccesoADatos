@@ -5,16 +5,16 @@ import com.svalero.RosasTattoo.domain.enums.AppointmentState;
 import com.svalero.RosasTattoo.domain.enums.TattooSize;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
+@Setter
+@Getter
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "appointments")
+@Entity(name = "appointment")
 public class Appointment {
 
     @Id
@@ -22,7 +22,7 @@ public class Appointment {
     private long id;
 
     @Column(name = "start_date_time")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     @NotNull(message = "This field is mandatory")
     private LocalDateTime startDateTime;
 

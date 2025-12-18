@@ -4,7 +4,7 @@ info:
   description: API del estudio de tatuajes 62 Rosas Tattoo.
   version: 1.0.0
 servers:
-  - url: 'https://localhost:8080/62RosasTattoo'
+  - url: 'https://localhost:8080'
 paths:
   /clients:
     get:
@@ -208,7 +208,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ProfessionalOutDto'
+                  $ref: '#/components/schemas/ProfessionalDto'
         '500':
           description: Internal server error
           content:
@@ -231,7 +231,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Professional'
+                $ref: '#/components/schemas/ProfessionalDto'
         '400':
           description: Petición no válida.
           content:
@@ -263,7 +263,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProfessionalOutDto'
+                $ref: '#/components/schemas/ProfessionalDto'
         '404':
           description: Profesional no encontrado.
           content:
@@ -300,7 +300,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Professional'
+                $ref: '#/components/schemas/ProfessionalDto'
         '400':
           description: Petición no válida.
           content:
@@ -386,7 +386,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/AppointmentOutDto'
+                  $ref: '#/components/schemas/AppointmentDto'
         '500':
           description: Internal server error
           content:
@@ -409,7 +409,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Appointment'
+                $ref: '#/components/schemas/AppointmentDto'
         '400':
           description: Petición no válida.
           content:
@@ -441,7 +441,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AppointmentOutDto'
+                $ref: '#/components/schemas/AppointmentDto'
         '404':
           description: Cita no encontrada.
           content:
@@ -478,7 +478,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Appointment'
+                $ref: '#/components/schemas/AppointmentDto'
         '400':
           description: Petición no válida.
           content:
@@ -556,7 +556,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/TattooOutDto'
+                  $ref: '#/components/schemas/TattooDto'
         '500':
           description: Internal server error
           content:
@@ -579,7 +579,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Tattoo'
+                $ref: '#/components/schemas/TattooDto'
         '400':
           description: Petición no válida.
           content:
@@ -611,7 +611,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TattooOutDto'
+                $ref: '#/components/schemas/TattooDto'
         '404':
           description: Tatuaje no encontrado.
           content:
@@ -648,7 +648,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Tattoo'
+                $ref: '#/components/schemas/TattooDto'
         '400':
           description: Petición no válida.
           content:
@@ -706,6 +706,8 @@ paths:
           schema:
             type: number
             format: int32
+            minimum: 1
+            maximum: 5
           description: Filtra por puntuación de la reseña.
         - name: professionalId
           in: query
@@ -728,7 +730,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ReviewOutDto'
+                  $ref: '#/components/schemas/ReviewDto'
         '500':
           description: Internal server error
           content:
@@ -751,7 +753,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Review'
+                $ref: '#/components/schemas/ReviewDto'
         '400':
           description: Petición no válida.
           content:
@@ -783,7 +785,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ReviewOutDto'
+                $ref: '#/components/schemas/ReviewDto'
         '404':
           description: Reseña no encontrada.
           content:
@@ -820,7 +822,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Review'
+                $ref: '#/components/schemas/ReviewDto'
         '400':
           description: Petición no válida.
           content:
@@ -896,7 +898,6 @@ components:
         - clientName
         - clientSurname
         - email
-        - showPhoto
       example:
         clientName: Andrea
         clientSurname: Fernandez de la Rosa
@@ -958,14 +959,6 @@ components:
         message: Bad request
         title: bad-request
 
-    Conflict:
-      allOf:
-        - $ref: '#/components/schemas/ErrorResponse'
-      example:
-        code: 409
-        message: Conflict
-        title: conflict
-
     ProfessionalInDto:
       type: object
       properties:
@@ -991,7 +984,7 @@ components:
           description: Años de experiencia del profesional
       required:
         - professionalName
-        - booksOpened
+        - description
       example:
         professionalName: "David el Titi"
         birthDate: "1986-12-05"
@@ -1000,21 +993,9 @@ components:
         booksOpened: true
         yearsExperience: 15
 
-    ProfessionalOutDto:
+    ProfessionalDto:
       allOf:
         - $ref: '#/components/schemas/ProfessionalInDto'
-      type: object
-      example:
-        professionalName: "David el Titi"
-        birthDate: "1986-12-05"
-        description: "Especialista en tatuaje neotradicional"
-        profilePhoto: "https://62rosastattoo.com/img/profesionales/davieltiti.jpg"
-        booksOpened: true
-        yearsExperience: 15
-
-    Professional:
-      allOf:
-        - $ref: '#/components/schemas/ProfessionalOutDto'
       type: object
       properties:
         id:
@@ -1033,9 +1014,14 @@ components:
     AppointmentInDto:
       type: object
       properties:
-        professionalName:
-          type: string
-          description: Nombre artístico del profesional con el que se reserva la cita
+        clientId:
+          type: number
+          format: int64
+          description: Identificador único del cliente que reserva la cita
+        professionalId:
+          type: number
+          format: int64
+          description: Identificador único del profesional con el que se reserva la cita
         startDateTime:
           type: string
           format: date-time
@@ -1061,37 +1047,36 @@ components:
           type: string
           description: URL de una imagen de referencia opcional
       required:
-        - professionalName
+        - clientId
+        - professionalId
         - startDateTime
         - bodyPlacement
         - ideaDescription
-        - firstTime
-        - tattooSize
       example:
-        professionalName: "David el Titi"
+        clientId: 1
+        professionalId: 1
         startDateTime: "2025-02-15T16:00:00"
-        bodyPlacement: "Wrist"
-        ideaDescription: "Nombre Manuel con letra fina y cursiva en la muñeca."
+        bodyPlacement: "Muñeca"
+        ideaDescription: "Nombre Manuel con letra fina y cursiva."
         firstTime: true
         tattooSize: "SMALL"
         referenceImageUrl: "https://www.ejemplo.com/manuel.jpg"
 
-    AppointmentOutDto:
+    AppointmentDto:
       allOf:
         - $ref: '#/components/schemas/AppointmentInDto'
       type: object
       properties:
-        clientId:
+        id:
           type: number
           format: int64
-          description: Identificador del cliente que ha reservado la cita
-        professionalId:
-          type: number
-          format: int64
-          description: Identificador del profesional que atenderá la cita
+          description: Identificador único de la cita
+        professionalName:
+          type: string
+          description: Nombre del profesional con el que se reserva la cita
         durationMinutes:
           type: number
-          format: int64
+          format: int32
           description: Duración de la cita en minutos
         price:
           type: number
@@ -1110,37 +1095,13 @@ components:
           type: boolean
           description: Indica si el cliente ha pagado la señal de 50€
       example:
+        id: 1
         clientId: 1
         professionalId: 1
         professionalName: "David el Titi"
         startDateTime: "2025-02-15T16:00:00"
-        bodyPlacement: "Wrist"
-        ideaDescription: "Nombre Manuel con letra fina y cursiva en la muñeca."
-        firstTime: true
-        tattooSize: "SMALL"
-        referenceImageUrl: "https://www.ejemplo.com/manuel.jpg"
-        durationMinutes: 60
-        price: 80.0
-        appointmentState: "CONFIRMED"
-        depositPaid: true
-
-    Appointment:
-      allOf:
-        - $ref: '#/components/schemas/AppointmentOutDto'
-      type: object
-      properties:
-        id:
-          type: number
-          format: int64
-          description: Identificador único de la cita
-      example:
-        id: 10
-        clientId: 1
-        professionalId: 1
-        professionalName: "David el Titi"
-        startDateTime: "2025-02-15T16:00:00"
-        bodyPlacement: "Wrist"
-        ideaDescription: "Nombre Manuel con letra fina y cursiva en la muñeca."
+        bodyPlacement: "Muñeca"
+        ideaDescription: "Nombre Manuel con letra fina y cursiva."
         firstTime: true
         tattooSize: "SMALL"
         referenceImageUrl: "https://www.ejemplo.com/manuel.jpg"
@@ -1156,9 +1117,10 @@ components:
           type: number
           format: int64
           description: Identificador interno del cliente
-        professionalName:
-          type: string
-          description: Nombre artístico del profesional que realizó el tatuaje
+        professionalId:
+          type: number
+          format: int64
+          description: Identificador único del profesional que realizó el tatuaje
         tattooDate:
           type: string
           format: date
@@ -1183,16 +1145,15 @@ components:
           type: boolean
           description: Indica si el tatuaje es a color o en blanco y negro
       required:
-        - professionalName
+        - clientId
+        - professionalId
         - tattooDate
         - style
         - tattooDescription
         - imageUrl
-        - coverUp
-        - color
       example:
         clientId: 1
-        professionalName: "David el Titi"
+        professionalId: 1
         tattooDate: "2025-03-10"
         style: "Blackwork"
         tattooDescription: "Rosa negra en el antebrazo con detalles geométricos."
@@ -1201,41 +1162,23 @@ components:
         coverUp: false
         color: false
 
-    TattooOutDto:
+    TattooDto:
       allOf:
         - $ref: '#/components/schemas/TattooInDto'
-      type: object
-      properties:
-        professionalId:
-          type: number
-          format: int64
-          description: Identificador interno del profesional
-      example:
-        clientId: 1
-        professionalName: "David el Titi"
-        professionalId: 2
-        tattooDate: "2025-03-10"
-        style: "Blackwork"
-        tattooDescription: "Rosa negra en el antebrazo con detalles geométricos."
-        imageUrl: "https://62rosastattoo.com/img/tattoos/rosa-negra-antebrazo.jpg"
-        sessions: 2
-        coverUp: false
-        color: false
-
-    Tattoo:
-      allOf:
-        - $ref: '#/components/schemas/TattooOutDto'
       type: object
       properties:
         id:
           type: number
           format: int64
-          description: Identificador único del tatuaje
+          description: Identificador único del tatuaje realizado
+        professionalName:
+          type: string
+          description: Nombre del profesional que realizó el tatuaje
       example:
-        id: 5
+        id: 1
         clientId: 1
-        professionalId: 2
         professionalName: "David el Titi"
+        professionalId: 1
         tattooDate: "2025-03-10"
         style: "Blackwork"
         tattooDescription: "Rosa negra en el antebrazo con detalles geométricos."
@@ -1254,6 +1197,8 @@ components:
         rating:
           type: number
           format: int32
+          minimum: 1
+          maximum: 5
           description: Puntuación de la reseña
         comment:
           type: string
@@ -1263,24 +1208,26 @@ components:
           description: Indica si el cliente recomendaría el estudio o al profesional
       required:
         - appointmentId
-        - rating
         - comment
-        - wouldRecommend
       example:
-        appointmentId: 10
+        appointmentId: 1
         rating: 5
         comment: "Experiencia genial, el trato ha sido increíble y el tatuaje ha quedado perfecto."
         wouldRecommend: true
 
-    ReviewOutDto:
+    ReviewDto:
       allOf:
         - $ref: '#/components/schemas/ReviewInDto'
       type: object
       properties:
+        id:
+          type: number
+          format: int64
+          description: Identificador único de la reseña
         clientId:
           type: number
           format: int64
-          description: Identificador del cliente que ha dejado la reseña
+          description: Identificador único del cliente que ha dejado la reseña
         professionalId:
           type: number
           format: int64
@@ -1290,28 +1237,10 @@ components:
           format: date-time
           description: Fecha y hora en la que se creó la reseña
       example:
-        appointmentId: 10
+        id: 1
+        appointmentId: 1
         clientId: 1
-        professionalId: 2
-        rating: 5
-        comment: "Experiencia genial, el trato ha sido increíble y el tatuaje ha quedado perfecto."
-        wouldRecommend: true
-        createdAt: "2025-03-12T19:45:00"
-
-    Review:
-      allOf:
-        - $ref: '#/components/schemas/ReviewOutDto'
-      type: object
-      properties:
-        id:
-          type: number
-          format: int64
-          description: Identificador único de la reseña
-      example:
-        id: 3
-        appointmentId: 10
-        clientId: 1
-        professionalId: 2
+        professionalId: 1
         rating: 5
         comment: "Experiencia genial, el trato ha sido increíble y el tatuaje ha quedado perfecto."
         wouldRecommend: true

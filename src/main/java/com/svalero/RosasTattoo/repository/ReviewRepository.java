@@ -13,7 +13,7 @@ public interface ReviewRepository extends CrudRepository<Review, Long> {
 
     List<Review> findAll();
 
-    @Query("SELECT r FROM reviews r WHERE " +
+    @Query("SELECT r FROM review r WHERE " +
             "(:rating IS NULL OR r.rating = :rating) AND " +
             "(:professionalId IS NULL OR r.appointment.professional.id = :professionalId) AND " +
             "(:recommend IS NULL OR r.wouldRecommend = :recommend)")
