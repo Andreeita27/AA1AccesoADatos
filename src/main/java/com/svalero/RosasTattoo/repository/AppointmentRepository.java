@@ -14,7 +14,7 @@ public interface AppointmentRepository extends CrudRepository<Appointment, Long>
 
     List<Appointment> findAll();
 
-    @Query("SELECT a FROM appointments a WHERE " +
+    @Query("SELECT a FROM appointment a WHERE " +
             "(:state IS NULL OR a.state = :state) AND " +
             "(:clientId IS NULL OR a.client.id = :clientId) AND " +
             "(:professionalId IS NULL OR a.professional.id = :professionalId)")

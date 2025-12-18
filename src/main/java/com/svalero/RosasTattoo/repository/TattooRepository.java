@@ -13,7 +13,7 @@ public interface TattooRepository extends CrudRepository<Tattoo, Long> {
 
     List<Tattoo> findAll();
 
-    @Query("SELECT t FROM tattoos t WHERE " +
+    @Query("SELECT t FROM tattoo t WHERE " +
             "(:style IS NULL OR t.style LIKE %:style%) AND " +
             "(:coverUp IS NULL OR t.coverUp = :coverUp) AND " +
             "(:color IS NULL OR t.color = :color)")
