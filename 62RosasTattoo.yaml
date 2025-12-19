@@ -29,6 +29,29 @@ paths:
           schema:
             type: boolean
           description: Filtra por si el cliente acepta que se muestren sus tatuajes.
+          examples:
+            empty:
+              summary: Sin resultados
+              value: [ ]
+            sample:
+              summary: Dos resultados
+              value:
+                - id: 1
+                  clientName: Andrea
+                  clientSurname: Fernandez de la Rosa
+                  email: andrea@example.com
+                  phone: +34 601375656
+                  birthDate: '1998-01-26'
+                  showPhoto: true
+                  visits: 3
+                - id: 2
+                  clientName: Alejandra
+                  clientSurname: Perbech Royan
+                  email: alejandra@example.com
+                  phone: +34 601070809
+                  birthDate: '1998-01-23'
+                  showPhoto: true
+                  visits: 3
       responses:
         '200':
           description: OK
@@ -54,6 +77,25 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/ClientInDto'
+            examples:
+              example1:
+                summary: Ejemplo 1
+                value:
+                  clientName: Andrea
+                  clientSurname: Fernandez de la Rosa
+                  email: andrea@example.com
+                  phone: +34 601375656
+                  birthDate: '1998-01-26'
+                  showPhoto: true
+              example2:
+                summary: Ejemplo 2
+                value:
+                  clientName: Alejandra
+                  clientSurname: Perbech Royan
+                  email: alejandra@example.com
+                  phone: +34 601070809
+                  birthDate: '1998-01-23'
+                  showPhoto: true
       responses:
         '201':
           description: Cliente creado correctamente.
@@ -86,6 +128,29 @@ paths:
             type: number
             format: int64
           description: Identificador único del cliente.
+          examples:
+            example1:
+              summary: Ejemplo 1
+              value:
+                id: 1
+                clientName: Andrea
+                clientSurname: Fernandez de la Rosa
+                email: andrea@example.com
+                phone: +34 601375656
+                birthDate: '1998-01-26'
+                showPhoto: true
+                visits: 3
+            example2:
+              summary: Ejemplo 2
+              value:
+                id: 2
+                clientName: Alejandra
+                clientSurname: Perbech Royan
+                email: alejandra@example.com
+                phone: +34 601070809
+                birthDate: '1998-01-23'
+                showPhoto: true
+                visits: 3
       responses:
         '200':
           description: Cliente encontrado.
@@ -123,6 +188,25 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/ClientInDto'
+            examples:
+              example1:
+                summary: Ejemplo 1
+                value:
+                  clientName: Andrea modificado
+                  clientSurname: Fernandez de la Rosa
+                  email: andrea@example.com
+                  phone: +34 601375656
+                  birthDate: '1998-01-26'
+                  showPhoto: true
+              example2:
+                summary: Ejemplo 2
+                value:
+                  clientName: Alejandra modificado
+                  clientSurname: Perbech Royan
+                  email: alejandra@example.com
+                  phone: +34 601070809
+                  birthDate: '1998-01-23'
+                  showPhoto: true
       responses:
         '200':
           description: Cliente actualizado correctamente.
@@ -200,6 +284,27 @@ paths:
             type: integer
             format: int64
           description: Filtra por años de experiencia.
+          examples:
+            empty:
+              summary: Sin resultados
+              value: [ ]
+            sample:
+              summary: Dos resultados
+              value:
+                - id: 1
+                  professionalName: David el Titi
+                  birthDate: '1986-12-05'
+                  description: Especialista en tatuaje neotradicional
+                  profilePhoto: https://62rosastattoo.com/img/profesionales/davideltiti.jpg
+                  booksOpened: true
+                  yearsExperience: 15
+                - id: 2
+                  professionalName: Sacapunk Tattoo
+                  birthDate: '1986-12-05'
+                  description: Especialista en tatuaje tradicional
+                  profilePhoto: https://62rosastattoo.com/img/profesionales/sacapunk.jpg
+                  booksOpened: true
+                  yearsExperience: 10
       responses:
         '200':
           description: OK
@@ -225,6 +330,25 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/ProfessionalInDto'
+            examples:
+              example1:
+                summary: Ejemplo 1
+                value:
+                  professionalName: David el Titi
+                  birthDate: '1986-12-05'
+                  description: Especialista en tatuaje neotradicional.
+                  profilePhoto: https://62rosastattoo.com/img/profesionales/davideltiti.jpg
+                  booksOpened: true
+                  yearsExperience: 15
+              example2:
+                summary: Ejemplo 2
+                value:
+                  professionalName: Sacapunk Tattoo
+                  birthDate: '1986-12-05'
+                  description: Especialista en tatuaje tradicional.
+                  profilePhoto: https://62rosastattoo.com/img/profesionales/sacapunk.jpg
+                  booksOpened: true
+                  yearsExperience: 10
       responses:
         '201':
           description: Profesional creado correctamente.
@@ -257,6 +381,27 @@ paths:
             type: number
             format: int64
           description: Identificador único del profesional.
+          examples:
+            example1:
+              summary: Ejemplo 1
+              value:
+                id: 1
+                professionalName: David el Titi
+                birthDate: '1986-12-05'
+                description: Especialista en tatuaje neotradicional
+                profilePhoto: https://62rosastattoo.com/img/profesionales/davideltiti.jpg
+                booksOpened: true
+                yearsExperience: 15
+            example2:
+              summary: Ejemplo 2
+              value:
+                id: 2
+                professionalName: Sacapunk Tattoo
+                birthDate: '1986-12-05'
+                description: Especialista en tatuaje tradicional
+                profilePhoto: https://62rosastattoo.com/img/profesionales/sacapunk.jpg
+                booksOpened: true
+                yearsExperience: 10
       responses:
         '200':
           description: Profesional encontrado.
@@ -294,6 +439,25 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/ProfessionalInDto'
+            examples:
+              example1:
+                summary: Ejemplo 1
+                value:
+                  professionalName: David el Titi
+                  birthDate: '1986-12-05'
+                  description: Especialista en tatuaje neotradicional.
+                  profilePhoto: https://62rosastattoo.com/img/profesionales/davideltiti.jpg
+                  booksOpened: true
+                  yearsExperience: 15
+              ejemplo2:
+                summary: Ejemplo 2
+                value:
+                  professionalName: Sacapunk Tattoo
+                  birthDate: '1986-12-05'
+                  description: Especialista en tatuaje tradicional.
+                  profilePhoto: https://62rosastattoo.com/img/profesionales/sacapunk.jpg
+                  booksOpened: true
+                  yearsExperience: 10
       responses:
         '200':
           description: Profesional actualizado correctamente.
@@ -378,6 +542,41 @@ paths:
             type: number
             format: int64
           description: Filtra por identificador del profesional.
+          examples:
+            empty:
+              summary: Sin resultados
+              value: [ ]
+            sample:
+              summary: Dos resultados
+              value:
+                - id: 1
+                  clientId: 1
+                  professionalId: 1
+                  professionalName: David el Titi
+                  startDateTime: '2025-02-15T16:00:00'
+                  bodyPlacement: Muñeca
+                  ideaDescription: Nombre Alejandra con letra fina y cursiva.
+                  firstTime: true
+                  tattooSize: SMALL
+                  referenceImageUrl: https://www.ejemplo.com/alejandra.jpg
+                  durationMinutes: 60
+                  price: 80.0
+                  appointmentState: CONFIRMED
+                  depositPaid: true
+                - id: 2
+                  clientId: 2
+                  professionalId: 2
+                  professionalName: Sacapunk Tattoo
+                  startDateTime: '2025-02-15T16:00:00'
+                  bodyPlacement: Muñeca
+                  ideaDescription: Nombre Andrea con letra fina y cursiva.
+                  firstTime: true
+                  tattooSize: SMALL
+                  referenceImageUrl: https://www.ejemplo.com/andrea.jpg
+                  durationMinutes: 60
+                  price: 80.0
+                  appointmentState: CONFIRMED
+                  depositPaid: true
       responses:
         '200':
           description: OK
@@ -403,6 +602,29 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/AppointmentInDto'
+            examples:
+              example1:
+                summary: Ejemplo 1
+                value:
+                  clientId: 1
+                  professionalId: 1
+                  startDateTime: '2025-02-15T16:00:00'
+                  bodyPlacement: Muñeca
+                  ideaDescription: Nombre Alejandra con letra fina y cursiva.
+                  firstTime: true
+                  tattooSize: SMALL
+                  referenceImageUrl: https://www.ejemplo.com/alejandra.jpg
+              example2:
+                summary: Ejemplo 2
+                value:
+                  clientId: 2
+                  professionalId: 2
+                  startDateTime: '2025-02-15T16:00:00'
+                  bodyPlacement: Muñeca
+                  ideaDescription: Nombre Andrea con letra fina y cursiva.
+                  firstTime: true
+                  tattooSize: SMALL
+                  referenceImageUrl: https://www.ejemplo.com/andrea.jpg
       responses:
         '201':
           description: Cita creada correctamente.
@@ -435,6 +657,41 @@ paths:
             type: number
             format: int64
           description: Identificador único de la cita.
+          examples:
+            example1:
+              summary: Ejemplo 1
+              value:
+                id: 1
+                clientId: 1
+                professionalId: 1
+                professionalName: David el Titi
+                startDateTime: '2025-02-15T16:00:00'
+                bodyPlacement: Muñeca
+                ideaDescription: Nombre Alejandra con letra fina y cursiva.
+                firstTime: true
+                tattooSize: SMALL
+                referenceImageUrl: https://www.ejemplo.com/alejandra.jpg
+                durationMinutes: 60
+                price: 80.0
+                appointmentState: CONFIRMED
+                depositPaid: true
+            example2:
+              summary: Ejemplo 2
+              value:
+                id: 2
+                clientId: 2
+                professionalId: 2
+                professionalName: Sacapunk Tattoo
+                startDateTime: '2025-02-15T16:00:00'
+                bodyPlacement: Muñeca
+                ideaDescription: Nombre Andrea con letra fina y cursiva.
+                firstTime: true
+                tattooSize: SMALL
+                referenceImageUrl: https://www.ejemplo.com/andrea.jpg
+                durationMinutes: 60
+                price: 80.0
+                appointmentState: CONFIRMED
+                depositPaid: true
       responses:
         '200':
           description: Cita encontrada.
@@ -472,6 +729,29 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/AppointmentInDto'
+            examples:
+              example1:
+                summary: Ejemplo 1
+                value:
+                  clientId: 1
+                  professionalId: 1
+                  startDateTime: '2025-02-15T16:00:00'
+                  bodyPlacement: Muñeca
+                  ideaDescription: Nombre Alejandra con letras góticas.
+                  firstTime: true
+                  tattooSize: SMALL
+                  referenceImageUrl: https://www.ejemplo.com/alejandra.jpg
+              example2:
+                summary: Ejemplo 2
+                value:
+                  clientId: 2
+                  professionalId: 2
+                  startDateTime: '2025-02-15T16:00:00'
+                  bodyPlacement: Muñeca
+                  ideaDescription: Nombre Andrea con letras góticas.
+                  firstTime: true
+                  tattooSize: SMALL
+                  referenceImageUrl: https://www.ejemplo.com/andrea.jpg
       responses:
         '200':
           description: Cita actualizada correctamente.
@@ -548,6 +828,35 @@ paths:
           schema:
             type: boolean
           description: Filtra por si el tatuaje es a color o en blanco y negro.
+          examples:
+            empty:
+              summary: Sin resultados
+              value: [ ]
+            sample:
+              summary: Dos resultados
+              value:
+                - id: 1
+                  clientId: 1
+                  professionalName: David el Titi
+                  professionalId: 1
+                  tattooDate: '2025-03-10'
+                  style: Blackwork
+                  tattooDescription: Rosa negra en el antebrazo con detalles geométricos.
+                  imageUrl: https://62rosastattoo.com/img/tattoos/rosanegra.jpg
+                  sessions: 2
+                  coverUp: false
+                  color: false
+                - id: 2
+                  clientId: 2
+                  professionalName: Sacapunk Tattoo
+                  professionalId: 1
+                  tattooDate: '2025-03-10'
+                  style: Tradicional
+                  tattooDescription: Rosa roja en el antebrazo con detalles geométricos.
+                  imageUrl: https://62rosastattoo.com/img/tattoos/rosaroja.jpg
+                  sessions: 2
+                  coverUp: false
+                  color: false
       responses:
         '200':
           description: OK
@@ -573,6 +882,31 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/TattooInDto'
+            examples:
+              example1:
+                summary: Ejemplo 1
+                value:
+                  clientId: 1
+                  professionalId: 1
+                  tattooDate: '2025-03-10'
+                  style: Blackwork
+                  tattooDescription: Rosa negra en el antebrazo con detalles geométricos.
+                  imageUrl: https://62rosastattoo.com/img/tattoos/rosanegra.jpg
+                  sessions: 2
+                  coverUp: false
+                  color: false
+              ejemplo2:
+                summary: Ejemplo 2
+                value:
+                  clientId: 2
+                  professionalId: 2
+                  tattooDate: '2025-03-10'
+                  style: Tradicional
+                  tattooDescription: Rosa roja en el antebrazo con detalles geométricos.
+                  imageUrl: https://62rosastattoo.com/img/tattoos/rosaroja.jpg
+                  sessions: 2
+                  coverUp: false
+                  color: false
       responses:
         '201':
           description: Tatuaje creado correctamente.
@@ -605,6 +939,35 @@ paths:
             type: number
             format: int64
           description: Identificador único del tatuaje.
+          examples:
+            example1:
+              summary: Ejemplo 1
+              value:
+                id: 1
+                clientId: 1
+                professionalName: David el Titi
+                professionalId: 1
+                tattooDate: '2025-03-10'
+                style: Blackwork
+                tattooDescription: Rosa negra en el antebrazo con detalles geométricos.
+                imageUrl: https://62rosastattoo.com/img/tattoos/rosanegra.jpg
+                sessions: 2
+                coverUp: false
+                color: false
+            example2:
+              summary: Ejemplo 2
+              value:
+                id: 2
+                clientId: 2
+                professionalName: Sacapunk Tattoo
+                professionalId: 2
+                tattooDate: '2025-03-10'
+                style: Tradicional
+                tattooDescription: Rosa roja en el antebrazo con detalles geométricos.
+                imageUrl: https://62rosastattoo.com/img/tattoos/rosaroja.jpg
+                sessions: 2
+                coverUp: false
+                color: false
       responses:
         '200':
           description: Tatuaje encontrado.
@@ -642,6 +1005,31 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/TattooInDto'
+            examples:
+              example1:
+                summary: Ejemplo 1
+                value:
+                  clientId: 1
+                  professionalId: 1
+                  tattooDate: '2025-03-10'
+                  style: Blackwork
+                  tattooDescription: Amapola negra en el antebrazo con detalles geométricos.
+                  imageUrl: https://62rosastattoo.com/img/tattoos/amapolanegra.jpg
+                  sessions: 2
+                  coverUp: false
+                  color: false
+              example2:
+                summary: Ejemplo 2
+                value:
+                  clientId: 2
+                  professionalId: 2
+                  tattooDate: '2025-03-10'
+                  style: Tradicional
+                  tattooDescription: Amapola roja en el antebrazo con detalles geométricos.
+                  imageUrl: https://62rosastattoo.com/img/tattoos/amapolaroja.jpg
+                  sessions: 2
+                  coverUp: false
+                  color: false
       responses:
         '200':
           description: Tatuaje actualizado correctamente.
@@ -722,6 +1110,29 @@ paths:
           schema:
             type: boolean
           description: Filtra por si el cliente recomendaría el estudio o no
+          examples:
+            empty:
+              summary: Sin resultados
+              value: [ ]
+            sample:
+              summary: Dos resultados
+              value:
+                - id: 1
+                  appointmentId: 1
+                  clientId: 1
+                  professionalId: 1
+                  rating: 5
+                  comment: Experiencia genial, el trato ha sido increíble y el tatuaje ha quedado perfecto.
+                  wouldRecommend: true
+                  createdAt: '2025-03-12T19:45:00'
+                - id: 2
+                  appointmentId: 2
+                  clientId: 2
+                  professionalId: 2
+                  rating: 4
+                  comment: Me dolió un poco más de lo que me esperaba.
+                  wouldRecommend: true
+                  createdAt: '2025-03-12T19:45:00'
       responses:
         '200':
           description: OK
@@ -747,6 +1158,21 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/ReviewInDto'
+            examples:
+              example1:
+                summary: Ejemplo 1
+                value:
+                  appointmentId: 1
+                  rating: 5
+                  comment: Experiencia genial, el trato ha sido increíble y el tatuaje ha quedado perfecto.
+                  wouldRecommend: true
+              example2:
+                summary: Ejemplo 2
+                value:
+                  appointmentId: 2
+                  rating: 4
+                  comment: Me dolió un poco más de lo que me esperaba.
+                  wouldRecommend: true
       responses:
         '201':
           description: Reseña creada correctamente.
@@ -779,6 +1205,29 @@ paths:
             type: number
             format: int64
           description: Identificador único de la reseña.
+          examples:
+            example1:
+              summary: Ejemplo 1
+              value:
+                id: 1
+                appointmentId: 1
+                clientId: 1
+                professionalId: 1
+                rating: 5
+                comment: Experiencia genial, el trato ha sido increíble y el tatuaje ha quedado perfecto.
+                wouldRecommend: true
+                createdAt: '2025-03-12T19:45:00'
+            example2:
+              summary: Ejemplo 2
+              value:
+                id: 2
+                appointmentId: 2
+                clientId: 2
+                professionalId: 2
+                rating: 4
+                comment: Me dolió un poco más de lo que me esperaba.
+                wouldRecommend: true
+                createdAt: '2025-03-12T19:45:00'
       responses:
         '200':
           description: Reseña encontrada.
@@ -816,6 +1265,21 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/ReviewInDto'
+            examples:
+              example1:
+                summary: Ejemplo 1
+                value:
+                  appointmentId: 1
+                  rating: 5
+                  comment: Experiencia genial, David es encantador.
+                  wouldRecommend: true
+              example2:
+                summary: Ejemplo 2
+                value:
+                  appointmentId: 2
+                  rating: 4
+                  comment: Aunque me dolió, Macarena me hizo reír.
+                  wouldRecommend: true
       responses:
         '200':
           description: Reseña actualizada correctamente.
